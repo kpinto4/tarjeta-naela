@@ -645,13 +645,50 @@
       border-color: var(--purple-soft);
     }
 
-    .companions-field {
+    .invitacion-cupo {
       display: none;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 1rem 1.15rem;
+      margin-bottom: 1.25rem;
+      background: rgba(244, 197, 66, 0.08);
+      border: 1px solid rgba(244, 197, 66, 0.35);
+      border-radius: 12px;
+      text-align: left;
     }
 
-    .companions-field.show {
-      display: block;
-      animation: fadeUp 0.4s ease forwards;
+    .invitacion-cupo.visible {
+      display: flex;
+    }
+
+    .invitacion-cupo .cupo-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .invitacion-cupo p {
+      color: var(--lavender);
+      line-height: 1.5;
+      font-size: 1.05rem;
+    }
+
+    .invitacion-cupo strong {
+      color: var(--gold);
+      font-family: 'Cinzel Decorative', serif;
+    }
+
+    .rsvp-sin-enlace {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      background: linear-gradient(145deg, rgba(92, 61, 122, 0.35), rgba(45, 27, 78, 0.5));
+      border: 1px solid rgba(244, 197, 66, 0.2);
+      border-radius: 16px;
+    }
+
+    .rsvp-sin-enlace p {
+      color: var(--lavender);
+      line-height: 1.7;
+      font-size: 1.1rem;
     }
 
     .btn-submit {
@@ -942,12 +979,23 @@
       <div class="section-divider reveal"><span>💌</span></div>
 
       <div id="rsvp-container" class="reveal">
+        <div id="rsvp-sin-enlace" class="rsvp-sin-enlace" style="display:none;">
+          <p>💌 Para confirmar tu asistencia, usa el <strong style="color:var(--gold);">enlace personalizado</strong> que te enviamos por WhatsApp.</p>
+        </div>
+
         <form class="rsvp-form" id="rsvp-form">
           <input type="hidden" id="familia-id" name="familia" value="">
+          <input type="hidden" id="personas" value="1">
+
+          <div class="invitacion-cupo" id="invitacion-cupo">
+            <span class="cupo-icon">👥</span>
+            <p id="invitacion-cupo-text"></p>
+          </div>
+
           <div class="form-group">
-            <label for="nombre">Tu nombre completo</label>
+            <label for="nombre">Tu nombre o familia</label>
             <input type="text" id="nombre" name="nombre" required
-                   placeholder="Ej: María García López" autocomplete="name">
+                   placeholder="Familia García" autocomplete="name" readonly>
           </div>
 
           <div class="form-group">
@@ -962,17 +1010,6 @@
                 <label for="asistencia-no">No podré ir 😢</label>
               </div>
             </div>
-          </div>
-
-          <div class="form-group companions-field" id="companions-field">
-            <label for="personas">¿Cuántas personas asistirán?</label>
-            <select id="personas" name="personas">
-              <option value="1">1 persona</option>
-              <option value="2">2 personas</option>
-              <option value="3">3 personas</option>
-              <option value="4">4 personas</option>
-              <option value="5">5 personas</option>
-            </select>
           </div>
 
           <div class="form-group">
@@ -1054,9 +1091,6 @@
       // Clave local para recordar si ya confirmó en este navegador
       storageKey: 'xv-miley-naela-2026',
 
-      // Máximo de personas (invitación general, sin ?f=)
-      defaultMaxPersonas: 5,
-
       // Música local (coloca el MP3 en la carpeta audio/)
       musicSrc: 'audio/Veo en ti la luz.mp3',
       musicVolume: 0.4,
@@ -1074,22 +1108,26 @@
       return new URLSearchParams(location.search).get('f');
     }
 
-    function updatePersonasLimit(maxPersonas) {
-      const select = document.getElementById('personas');
-      const max = Math.max(1, Math.min(20, maxPersonas || CONFIG.defaultMaxPersonas));
-      select.innerHTML = '';
-      for (let i = 1; i <= max; i++) {
-        const opt = document.createElement('option');
-        opt.value = String(i);
-        opt.textContent = i === 1 ? '1 persona' : `${i} personas`;
-        select.appendChild(opt);
-      }
+    function mostrarSinEnlace() {
+      document.getElementById('rsvp-sin-enlace').style.display = 'block';
+      document.getElementById('rsvp-form').style.display = 'none';
+    }
+
+    function setupInvitacionCupo(maxPersonas) {
+      const cupo = document.getElementById('invitacion-cupo');
+      const text = document.getElementById('invitacion-cupo-text');
+      const n = Math.max(1, maxPersonas || 1);
+      document.getElementById('personas').value = String(n);
+      text.innerHTML = n === 1
+        ? 'Esta invitación es para <strong>1 persona</strong>.'
+        : `Esta invitación es para <strong>${n} personas</strong>.`;
+      cupo.classList.add('visible');
     }
 
     async function initInvitacionPersonalizada() {
       const familiaId = getFamiliaParam();
       if (!familiaId) {
-        updatePersonasLimit(CONFIG.defaultMaxPersonas);
+        mostrarSinEnlace();
         return;
       }
 
@@ -1110,7 +1148,7 @@
         }
 
         if (!familia) {
-          updatePersonasLimit(CONFIG.defaultMaxPersonas);
+          mostrarSinEnlace();
           return;
         }
 
@@ -1123,14 +1161,11 @@
 
         document.getElementById('nombre').value = familia.nombre;
         document.getElementById('familia-id').value = familia.id;
-
-        updatePersonasLimit(familia.maxPersonas || CONFIG.defaultMaxPersonas);
+        setupInvitacionCupo(familia.maxPersonas);
       } catch {
-        updatePersonasLimit(CONFIG.defaultMaxPersonas);
+        mostrarSinEnlace();
       }
     }
-
-    initInvitacionPersonalizada();
 
     // ── Estrellas ──
     const starsContainer = document.getElementById('stars');
@@ -1235,18 +1270,26 @@
     const rsvpForm = document.getElementById('rsvp-form');
     const rsvpContainer = document.getElementById('rsvp-container');
     const rsvpMessage = document.getElementById('rsvp-message');
-    const companionsField = document.getElementById('companions-field');
     const btnRsvp = document.getElementById('btn-rsvp');
 
-    document.querySelectorAll('input[name="asistencia"]').forEach(radio => {
-      radio.addEventListener('change', () => {
-        if (document.getElementById('asistencia-si').checked) {
-          companionsField.classList.add('show');
-        } else {
-          companionsField.classList.remove('show');
-        }
-      });
-    });
+    function getPersonasConfirmadas(asistenciaSi) {
+      if (!asistenciaSi) return 0;
+      if (invitadoActual?.maxPersonas) return invitadoActual.maxPersonas;
+      return parseInt(document.getElementById('personas').value, 10) || 1;
+    }
+
+    async function initRsvp() {
+      await initInvitacionPersonalizada();
+
+      const familiaParam = getFamiliaParam();
+      const savedName = localStorage.getItem(CONFIG.storageKey + '-user' + (familiaParam ? '-' + familiaParam : ''));
+      if ((savedName || familiaParam) && invitadoActual) {
+        const saved = getLocalConfirmations().find(c =>
+          familiaParam ? c.familia === familiaParam : c.nombre.toLowerCase() === savedName.toLowerCase()
+        );
+        if (saved) showAlreadyConfirmed(saved);
+      }
+    }
 
     function getLocalConfirmations() {
       try {
@@ -1281,17 +1324,6 @@
         </div>`;
     }
 
-    const familiaParam = getFamiliaParam();
-    const savedName = localStorage.getItem(CONFIG.storageKey + '-user' + (familiaParam ? '-' + familiaParam : ''));
-    if (savedName || familiaParam) {
-      const saved = getLocalConfirmations().find(c =>
-        familiaParam
-          ? c.familia === familiaParam
-          : c.nombre.toLowerCase() === savedName.toLowerCase()
-      );
-      if (saved) showAlreadyConfirmed(saved);
-    }
-
     rsvpForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -1314,9 +1346,7 @@
         nombre: document.getElementById('nombre').value.trim(),
         familia: familiaId,
         asistencia: asistenciaEl.value,
-        personas: document.getElementById('asistencia-si').checked
-          ? parseInt(document.getElementById('personas').value, 10) || 1
-          : 0,
+        personas: getPersonasConfirmadas(document.getElementById('asistencia-si').checked),
         mensaje: document.getElementById('mensaje').value.trim()
       };
 
@@ -1382,6 +1412,8 @@
         setTimeout(() => showAlreadyConfirmed(entry), 400);
       }
     });
+
+    initRsvp();
 
     // ══════════════════════════════════════════════
     //  MÚSICA — requiere gesto del usuario (política autoplay)
