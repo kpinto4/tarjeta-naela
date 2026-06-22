@@ -934,6 +934,93 @@
       user-select: none;
     }
 
+    /* ── Pantalla de entrada + control de música ── */
+    .music-splash {
+      position: fixed;
+      inset: 0;
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(13, 6, 24, 0.92);
+      backdrop-filter: blur(10px);
+      padding: 1.5rem;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    .music-splash.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .music-splash-card {
+      text-align: center;
+      max-width: 360px;
+      animation: fadeUp 0.8s ease forwards;
+    }
+
+    .music-splash-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    .music-splash-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.4rem, 5vw, 1.8rem);
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .music-splash-text {
+      color: var(--purple-soft);
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-bottom: 1.75rem;
+    }
+
+    .music-toggle {
+      position: fixed;
+      bottom: 1.25rem;
+      right: 1.25rem;
+      z-index: 800;
+      width: 48px;
+      height: 48px;
+      border: 1px solid rgba(244, 197, 66, 0.4);
+      border-radius: 50%;
+      background: linear-gradient(145deg, rgba(92, 61, 122, 0.9), rgba(45, 27, 78, 0.95));
+      color: var(--gold);
+      font-size: 1.25rem;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .music-toggle.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .music-toggle:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 24px rgba(244, 197, 66, 0.25);
+    }
+
+    .music-toggle.playing {
+      animation: musicPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes musicPulse {
+      0%, 100% { box-shadow: 0 4px 20px rgba(244, 197, 66, 0.2); }
+      50% { box-shadow: 0 4px 28px rgba(244, 197, 66, 0.45); }
+    }
+
     /* ── Responsive ── */
     @media (max-width: 480px) {
       .detail-card { padding: 1.5rem 1rem; }
@@ -1167,7 +1254,26 @@
 
   </div>
 
-  <audio id="bg-music" loop preload="auto" autoplay>
+  <!-- Pantalla de bienvenida: el navegador exige un clic para reproducir audio -->
+  <div class="music-splash" id="music-splash">
+    <div class="music-splash-card">
+      <div class="music-splash-icon">🏮</div>
+      <h2 class="music-splash-title">Invitación XV Años</h2>
+      <p class="music-splash-text">
+        Toca el botón para entrar y escuchar<br>
+        <em>"Veo en ti la luz"</em> 🎵
+      </p>
+      <button type="button" class="btn-magic" id="music-enter-btn" style="margin-top:0;">
+        Entrar ✨
+      </button>
+    </div>
+  </div>
+
+  <button type="button" class="music-toggle" id="music-toggle" aria-label="Activar o pausar música" title="Música">
+    🔇
+  </button>
+
+  <audio id="bg-music" loop preload="auto">
     <source src="audio/Veo en ti la luz.mp3" type="audio/mpeg">
   </audio>
 
@@ -1608,24 +1714,47 @@
     });
 
     // ══════════════════════════════════════════════
-    //  MÚSICA — Veo en ti la luz (archivo local)
+    //  MÚSICA — requiere gesto del usuario (política autoplay)
     // ══════════════════════════════════════════════
     const bgMusic = document.getElementById('bg-music');
+    const musicSplash = document.getElementById('music-splash');
+    const musicEnterBtn = document.getElementById('music-enter-btn');
+    const musicToggle = document.getElementById('music-toggle');
     bgMusic.volume = CONFIG.musicVolume;
-    let musicStarted = false;
 
-    async function startMusic() {
-      if (musicStarted) return;
-      try {
-        await bgMusic.play();
-        musicStarted = true;
-      } catch { /* el navegador bloqueó autoplay */ }
+    function updateMusicToggle(playing) {
+      musicToggle.textContent = playing ? '🎵' : '🔇';
+      musicToggle.classList.toggle('playing', playing);
+      musicToggle.setAttribute('aria-label', playing ? 'Pausar música' : 'Activar música');
     }
 
-    startMusic();
+    async function playMusic() {
+      try {
+        await bgMusic.play();
+        updateMusicToggle(true);
+        return true;
+      } catch {
+        updateMusicToggle(false);
+        return false;
+      }
+    }
 
-    ['click', 'touchstart', 'scroll', 'keydown'].forEach(event => {
-      document.addEventListener(event, startMusic, { once: true, passive: true });
+    function pauseMusic() {
+      bgMusic.pause();
+      updateMusicToggle(false);
+    }
+
+    async function enterInvitation() {
+      const ok = await playMusic();
+      musicSplash.classList.add('hidden');
+      musicToggle.classList.add('visible');
+      if (!ok) musicToggle.classList.add('visible');
+    }
+
+    musicEnterBtn.addEventListener('click', enterInvitation);
+    musicToggle.addEventListener('click', async () => {
+      if (bgMusic.paused) await playMusic();
+      else pauseMusic();
     });
   </script>
 </body>
