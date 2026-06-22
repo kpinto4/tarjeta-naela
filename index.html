@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invitación · XV Años · Miley Naela</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #f4c542;
+      --gold-light: #ffeaa7;
+      --purple-deep: #2d1b4e;
+      --purple-mid: #5c3d7a;
+      --purple-soft: #9b7bb8;
+      --lavender: #e8d5f2;
+      --pink: #f5a9c8;
+      --sky: #1a0f2e;
+      --sky-mid: #2a1845;
+      --lantern-glow: rgba(255, 200, 80, 0.85);
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      background: var(--sky);
+      color: var(--lavender);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ── Fondo animado ── */
+    .sky {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: radial-gradient(ellipse at 50% 0%, #3d2060 0%, var(--sky) 50%, #0d0618 100%);
+      overflow: hidden;
+    }
+
+    .stars {
+      position: absolute;
+      inset: 0;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle var(--dur, 3s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+      opacity: 0.3;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.4); }
+    }
+
+    /* ── Linternas flotantes ── */
+    .lanterns {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .lantern {
+      position: absolute;
+      bottom: -120px;
+      animation: floatUp linear infinite;
+      opacity: 0;
+    }
+
+    .lantern-body {
+      width: var(--size, 28px);
+      height: calc(var(--size, 28px) * 1.3);
+      background: radial-gradient(ellipse at 50% 40%, #fff8dc, var(--gold) 60%, #c8960c);
+      border-radius: 50% 50% 45% 45%;
+      box-shadow:
+        0 0 20px var(--lantern-glow),
+        0 0 40px rgba(255, 180, 50, 0.4),
+        inset 0 -4px 8px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    .lantern-body::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(var(--size, 28px) * 0.5);
+      height: 8px;
+      background: #8b6914;
+      border-radius: 2px 2px 0 0;
+    }
+
+    .lantern-body::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 12px;
+      background: linear-gradient(to bottom, #8b6914, transparent);
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) translateX(0) rotate(-3deg);
+        opacity: 0;
+      }
+      5% { opacity: var(--opacity, 0.7); }
+      50% { transform: translateY(-50vh) translateX(var(--drift, 20px)) rotate(3deg); }
+      95% { opacity: var(--opacity, 0.7); }
+      100% {
+        transform: translateY(-110vh) translateX(calc(var(--drift, 20px) * 1.5)) rotate(-2deg);
+        opacity: 0;
+      }
+    }
+
+    /* ── Pétalos / chispas doradas ── */
+    .petals {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .petal {
+      position: absolute;
+      top: -20px;
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, var(--gold-light), var(--gold));
+      border-radius: 50% 0 50% 50%;
+      animation: fall linear infinite;
+      opacity: 0.6;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-20px) rotate(0deg) translateX(0); opacity: 0; }
+      10% { opacity: 0.7; }
+      100% { transform: translateY(110vh) rotate(720deg) translateX(var(--sway, 60px)); opacity: 0; }
+    }
+
+    /* ── Torre silueta ── */
+    .tower {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.15;
+    }
+
+    .tower svg {
+      width: min(280px, 50vw);
+      height: auto;
+    }
+
+    /* ── Contenido principal ── */
+    .content {
+      position: relative;
+      z-index: 10;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      position: relative;
+    }
+
+    .hero-crown {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      animation: bounce 2s ease-in-out infinite;
+      filter: drop-shadow(0 0 12px var(--gold));
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 3vw, 1.3rem);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--purple-soft);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.3s forwards;
+    }
+
+    .hero-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2.8rem, 10vw, 5.5rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold), #fff8dc, var(--gold));
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 4s linear infinite, fadeUp 1s ease 0.6s forwards;
+      opacity: 0;
+      line-height: 1.1;
+      text-shadow: none;
+      filter: drop-shadow(0 0 20px rgba(244, 197, 66, 0.4));
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+
+    .hero-age {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      color: var(--pink);
+      margin-top: 0.5rem;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.9s forwards;
+    }
+
+    .hero-tagline {
+      font-style: italic;
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      color: var(--lavender);
+      margin-top: 1.5rem;
+      max-width: 480px;
+      opacity: 0;
+      animation: fadeUp 1s ease 1.2s forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cabello decorativo */
+    .hair-strand {
+      position: absolute;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--gold-light), var(--gold), #c8960c);
+      border-radius: 3px;
+      opacity: 0.5;
+      animation: hairSway 4s ease-in-out infinite;
+      transform-origin: top center;
+    }
+
+    .hair-strand:nth-child(1) { left: 8%; top: 10%; height: 120px; animation-delay: 0s; }
+    .hair-strand:nth-child(2) { right: 12%; top: 15%; height: 90px; animation-delay: 1s; width: 2px; }
+    .hair-strand:nth-child(3) { left: 15%; top: 30%; height: 70px; animation-delay: 2s; width: 2px; }
+    .hair-strand:nth-child(4) { right: 8%; top: 25%; height: 100px; animation-delay: 0.5s; }
+
+    @keyframes hairSway {
+      0%, 100% { transform: rotate(-5deg); }
+      50% { transform: rotate(8deg); }
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fadeUpCenter 1s ease 2s forwards;
+      color: var(--purple-soft);
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    @keyframes fadeUpCenter {
+      from { opacity: 0; transform: translateX(-50%) translateY(30px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    .scroll-arrow {
+      width: 24px;
+      height: 24px;
+      border-right: 2px solid var(--gold);
+      border-bottom: 2px solid var(--gold);
+      transform: rotate(45deg);
+      animation: arrowBounce 1.5s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes arrowBounce {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50% { transform: rotate(45deg) translateY(6px); }
+    }
+
+    /* ── Secciones ── */
+    section {
+      padding: 5rem 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
+      text-align: center;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .section-divider span {
+      color: var(--purple-soft);
+      font-size: 1.2rem;
+    }
+
+    .section-divider::before,
+    .section-divider::after {
+      content: '';
+      flex: 1;
+      max-width: 80px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Tarjetas de detalles ── */
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .detail-card {
+      background: linear-gradient(145deg, rgba(92, 61, 122, 0.4), rgba(45, 27, 78, 0.6));
+      border: 1px solid rgba(244, 197, 66, 0.25);
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      backdrop-filter: blur(8px);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .detail-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(244, 197, 66, 0.08), transparent 70%);
+      pointer-events: none;
+    }
+
+    .detail-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 40px rgba(244, 197, 66, 0.15);
+    }
+
+    .detail-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+      animation: iconPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes iconPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .detail-label {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .detail-value {
+      font-size: clamp(1.1rem, 3vw, 1.35rem);
+      color: var(--lavender);
+      line-height: 1.5;
+    }
+
+    .detail-value strong {
+      display: block;
+      font-size: 1.15em;
+      color: white;
+      margin-bottom: 0.25rem;
+    }
+
+    /* ── Countdown ── */
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: clamp(0.75rem, 3vw, 1.5rem);
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .countdown-item {
+      background: rgba(45, 27, 78, 0.7);
+      border: 1px solid rgba(244, 197, 66, 0.3);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      min-width: 72px;
+      text-align: center;
+    }
+
+    .countdown-number {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.8rem, 6vw, 2.5rem);
+      color: var(--gold);
+      display: block;
+      line-height: 1;
+    }
+
+    .countdown-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--purple-soft);
+      margin-top: 0.4rem;
+    }
+
+    /* ── Mensaje / Dress code ── */
+    .message-box {
+      background: linear-gradient(145deg, rgba(155, 123, 184, 0.15), rgba(45, 27, 78, 0.5));
+      border: 1px solid rgba(245, 169, 200, 0.3);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .message-box p {
+      font-size: clamp(1.1rem, 3vw, 1.35rem);
+      line-height: 1.8;
+      color: var(--lavender);
+    }
+
+    .message-box .quote {
+      font-style: italic;
+      color: var(--pink);
+      font-size: 1.1em;
+      margin-top: 1.5rem;
+    }
+
+    .dress-code {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(244, 197, 66, 0.2);
+    }
+
+    .dress-code h3 {
+      font-family: 'Cinzel Decorative', serif;
+      color: var(--gold);
+      font-size: 1rem;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.5rem;
+    }
+
+    .dress-colors {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+
+    .color-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.3);
+      animation: colorPulse 2s ease-in-out infinite;
+    }
+
+    .color-dot:nth-child(1) { background: var(--purple-mid); animation-delay: 0s; }
+    .color-dot:nth-child(2) { background: var(--gold); animation-delay: 0.3s; }
+    .color-dot:nth-child(3) { background: var(--pink); animation-delay: 0.6s; }
+    .color-dot:nth-child(4) { background: var(--lavender); animation-delay: 0.9s; }
+
+    @keyframes colorPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+
+    /* ── Mapa / botón ── */
+    .map-section {
+      text-align: center;
+    }
+
+    .btn-magic {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(135deg, var(--gold), #e6a817);
+      color: var(--purple-deep);
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 20px rgba(244, 197, 66, 0.4);
+      margin-top: 1.5rem;
+    }
+
+    .btn-magic:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 30px rgba(244, 197, 66, 0.6);
+    }
+
+    .btn-magic:active {
+      transform: scale(0.98);
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 3rem 1.5rem 4rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    footer p {
+      font-family: 'Cinzel Decorative', serif;
+      color: var(--purple-soft);
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+    }
+
+    footer .footer-flowers {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      animation: bounce 2.5s ease-in-out infinite;
+    }
+
+    /* ── RSVP ── */
+    .rsvp-form {
+      background: linear-gradient(145deg, rgba(92, 61, 122, 0.35), rgba(45, 27, 78, 0.65));
+      border: 1px solid rgba(244, 197, 66, 0.3);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      background: rgba(26, 15, 46, 0.7);
+      border: 1px solid rgba(155, 123, 184, 0.4);
+      border-radius: 10px;
+      color: var(--lavender);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 12px rgba(244, 197, 66, 0.2);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .radio-option {
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .radio-option input {
+      display: none;
+    }
+
+    .radio-option label {
+      display: block;
+      padding: 0.85rem 1rem;
+      text-align: center;
+      background: rgba(26, 15, 46, 0.5);
+      border: 1px solid rgba(155, 123, 184, 0.3);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--lavender);
+    }
+
+    .radio-option input:checked + label {
+      background: rgba(244, 197, 66, 0.15);
+      border-color: var(--gold);
+      color: var(--gold-light);
+    }
+
+    .radio-option label:hover {
+      border-color: var(--purple-soft);
+    }
+
+    .companions-field {
+      display: none;
+    }
+
+    .companions-field.show {
+      display: block;
+      animation: fadeUp 0.4s ease forwards;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 1rem;
+      margin-top: 0.5rem;
+      background: linear-gradient(135deg, var(--pink), #d4739a);
+      color: white;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 4px 20px rgba(245, 169, 200, 0.35);
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      transform: scale(1.02);
+      box-shadow: 0 6px 28px rgba(245, 169, 200, 0.5);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .rsvp-message {
+      margin-top: 1.25rem;
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 1.05rem;
+      display: none;
+    }
+
+    .rsvp-message.success {
+      display: block;
+      background: rgba(76, 175, 80, 0.15);
+      border: 1px solid rgba(76, 175, 80, 0.4);
+      color: #a5d6a7;
+    }
+
+    .rsvp-message.error {
+      display: block;
+      background: rgba(244, 67, 54, 0.15);
+      border: 1px solid rgba(244, 67, 54, 0.4);
+      color: #ef9a9a;
+    }
+
+    .rsvp-already {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .rsvp-already .check-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    /* ── Panel Admin ── */
+    .admin-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(13, 6, 24, 0.95);
+      backdrop-filter: blur(8px);
+      overflow-y: auto;
+      padding: 2rem 1rem;
+    }
+
+    .admin-overlay.open {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .admin-panel {
+      background: linear-gradient(145deg, #2a1845, #1a0f2e);
+      border: 1px solid rgba(244, 197, 66, 0.3);
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 800px;
+      width: 100%;
+      margin: auto;
+    }
+
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .admin-header h2 {
+      font-family: 'Cinzel Decorative', serif;
+      color: var(--gold);
+      font-size: 1.4rem;
+    }
+
+    .admin-close {
+      background: none;
+      border: 1px solid var(--purple-soft);
+      color: var(--lavender);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: border-color 0.3s;
+    }
+
+    .admin-close:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .admin-pin-form input {
+      width: 100%;
+      padding: 0.85rem;
+      background: rgba(26, 15, 46, 0.7);
+      border: 1px solid rgba(155, 123, 184, 0.4);
+      border-radius: 10px;
+      color: var(--lavender);
+      font-size: 1.1rem;
+      text-align: center;
+      letter-spacing: 0.3em;
+      margin-bottom: 1rem;
+    }
+
+    .admin-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-box {
+      background: rgba(92, 61, 122, 0.3);
+      border: 1px solid rgba(244, 197, 66, 0.2);
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.8rem;
+      color: var(--gold);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--purple-soft);
+      margin-top: 0.25rem;
+    }
+
+    .admin-table-wrap {
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    .admin-table th {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      padding: 0.75rem 0.5rem;
+      border-bottom: 1px solid rgba(244, 197, 66, 0.3);
+      text-align: left;
+    }
+
+    .admin-table td {
+      padding: 0.65rem 0.5rem;
+      border-bottom: 1px solid rgba(155, 123, 184, 0.15);
+      color: var(--lavender);
+    }
+
+    .admin-table tr:hover td {
+      background: rgba(244, 197, 66, 0.05);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+    }
+
+    .badge-yes {
+      background: rgba(76, 175, 80, 0.2);
+      color: #a5d6a7;
+    }
+
+    .badge-no {
+      background: rgba(244, 67, 54, 0.2);
+      color: #ef9a9a;
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-admin {
+      padding: 0.65rem 1.25rem;
+      background: rgba(92, 61, 122, 0.5);
+      border: 1px solid rgba(244, 197, 66, 0.3);
+      border-radius: 8px;
+      color: var(--lavender);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-admin:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .admin-empty {
+      text-align: center;
+      padding: 2rem;
+      color: var(--purple-soft);
+    }
+
+    .admin-hint {
+      font-size: 0.85rem;
+      color: var(--purple-soft);
+      margin-top: 1rem;
+      line-height: 1.6;
+    }
+
+    footer .admin-trigger {
+      cursor: default;
+      user-select: none;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .detail-card { padding: 1.5rem 1rem; }
+      .countdown-item { min-width: 60px; padding: 0.75rem; }
+      .admin-stats { grid-template-columns: 1fr; }
+      .rsvp-form { padding: 1.75rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fondo -->
+  <div class="sky">
+    <div class="stars" id="stars"></div>
+  </div>
+
+  <!-- Linternas -->
+  <div class="lanterns" id="lanterns"></div>
+
+  <!-- Pétalos dorados -->
+  <div class="petals" id="petals"></div>
+
+  <!-- Torre -->
+  <div class="tower">
+    <svg viewBox="0 0 200 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="60" y="120" width="80" height="180" fill="#1a0f2e" stroke="#5c3d7a" stroke-width="1"/>
+      <rect x="70" y="140" width="15" height="25" rx="8" fill="#2a1845"/>
+      <rect x="115" y="140" width="15" height="25" rx="8" fill="#2a1845"/>
+      <rect x="70" y="190" width="15" height="25" rx="8" fill="#2a1845"/>
+      <rect x="115" y="190" width="15" height="25" rx="8" fill="#2a1845"/>
+      <rect x="70" y="240" width="15" height="25" rx="8" fill="#2a1845"/>
+      <rect x="115" y="240" width="15" height="25" rx="8" fill="#2a1845"/>
+      <polygon points="100,20 55,120 145,120" fill="#1a0f2e" stroke="#5c3d7a" stroke-width="1"/>
+      <rect x="85" y="60" width="30" height="40" rx="15" fill="#2a1845"/>
+      <line x1="100" y1="20" x2="100" y2="5" stroke="#5c3d7a" stroke-width="2"/>
+      <polygon points="100,5 93,18 107,18" fill="#5c3d7a"/>
+    </svg>
+  </div>
+
+  <div class="content">
+
+    <!-- HERO -->
+    <header class="hero">
+      <div class="hair-strand"></div>
+      <div class="hair-strand"></div>
+      <div class="hair-strand"></div>
+      <div class="hair-strand"></div>
+
+      <div class="hero-crown">👑</div>
+      <p class="hero-subtitle">Estás invitado a celebrar</p>
+      <h1 class="hero-name">Miley Naela</h1>
+      <p class="hero-age">Mis XV Años</p>
+      <p class="hero-tagline">
+        "Veo en ti la luz brillar…<br>
+        y sueño con compartir contigo la magia de mis quince años"
+      </p>
+
+      <div class="scroll-hint">
+        <span>Descubre los detalles</span>
+        <div class="scroll-arrow"></div>
+      </div>
+    </header>
+
+    <!-- DETALLES -->
+    <section id="detalles">
+      <h2 class="section-title reveal">Detalles del Evento</h2>
+      <div class="section-divider reveal"><span>✦</span></div>
+
+      <div class="details-grid">
+        <div class="detail-card reveal">
+          <span class="detail-icon">📅</span>
+          <p class="detail-label">Fecha</p>
+          <div class="detail-value">
+            <strong>Sábado 18 de Julio</strong>
+            2026
+          </div>
+        </div>
+
+        <div class="detail-card reveal">
+          <span class="detail-icon">🕕</span>
+          <p class="detail-label">Hora</p>
+          <div class="detail-value">
+            <strong>5:00 PM</strong>
+            Recepción de invitados
+          </div>
+        </div>
+
+        <div class="detail-card reveal">
+          <span class="detail-icon">🏰</span>
+          <p class="detail-label">Lugar</p>
+          <div class="detail-value">
+            <strong>Calle 1A #16</strong>
+            Piedecuesta, Santander · Colombia
+          </div>
+        </div>
+      </div>
+
+      <!-- Countdown -->
+      <div class="countdown reveal" id="countdown">
+        <div class="countdown-item">
+          <span class="countdown-number" id="days">00</span>
+          <span class="countdown-label">Días</span>
+        </div>
+        <div class="countdown-item">
+          <span class="countdown-number" id="hours">00</span>
+          <span class="countdown-label">Horas</span>
+        </div>
+        <div class="countdown-item">
+          <span class="countdown-number" id="minutes">00</span>
+          <span class="countdown-label">Minutos</span>
+        </div>
+        <div class="countdown-item">
+          <span class="countdown-number" id="seconds">00</span>
+          <span class="countdown-label">Segundos</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- MENSAJE -->
+    <section id="mensaje">
+      <h2 class="section-title reveal">Un Sueño Hecho Realidad</h2>
+      <div class="section-divider reveal"><span>🌸</span></div>
+
+      <div class="message-box reveal">
+        <p>
+          Como Rapunzel soñaba con ver las luces flotar en el cielo,
+          Miley Naela sueña con compartir este momento mágico contigo.
+          Será una noche llena de música, baile y momentos inolvidables
+          para celebrar sus quince años.
+        </p>
+        <p class="quote">
+          "Veo en ti la luz brillar, y te invito a ser parte de mi cuento de hadas."
+        </p>
+
+        <div class="dress-code">
+          <h3>Código de Vestimenta</h3>
+          <p>Elegante · Colores sugeridos:</p>
+          <div class="dress-colors">
+            <div class="color-dot" title="Morado"></div>
+            <div class="color-dot" title="Dorado"></div>
+            <div class="color-dot" title="Rosa"></div>
+            <div class="color-dot" title="Lavanda"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONFIRMAR ASISTENCIA -->
+    <section id="rsvp">
+      <h2 class="section-title reveal">Confirma tu Asistencia</h2>
+      <div class="section-divider reveal"><span>💌</span></div>
+
+      <div id="rsvp-container" class="reveal">
+        <form class="rsvp-form" id="rsvp-form">
+          <div class="form-group">
+            <label for="nombre">Tu nombre completo</label>
+            <input type="text" id="nombre" name="nombre" required
+                   placeholder="Ej: María García López" autocomplete="name">
+          </div>
+
+          <div class="form-group">
+            <label>¿Asistirás?</label>
+            <div class="radio-group">
+              <div class="radio-option">
+                <input type="radio" id="asistencia-si" name="asistencia" value="Sí" required>
+                <label for="asistencia-si">¡Sí, ahí estaré! 🎉</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" id="asistencia-no" name="asistencia" value="No">
+                <label for="asistencia-no">No podré ir 😢</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group companions-field" id="companions-field">
+            <label for="acompanantes">¿Cuántos acompañantes traes?</label>
+            <select id="acompanantes" name="acompanantes">
+              <option value="0">Solo yo</option>
+              <option value="1">1 acompañante</option>
+              <option value="2">2 acompañantes</option>
+              <option value="3">3 acompañantes</option>
+              <option value="4">4 acompañantes</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="mensaje">Mensaje para Miley Naela (opcional)</label>
+            <textarea id="mensaje" name="mensaje"
+                      placeholder="Escríbele un mensajito especial..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit" id="btn-rsvp">
+            Enviar confirmación ✨
+          </button>
+
+          <div class="rsvp-message" id="rsvp-message"></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- UBICACIÓN -->
+    <section id="ubicacion" class="map-section">
+      <h2 class="section-title reveal">¿Cómo Llegar?</h2>
+      <div class="section-divider reveal"><span>✦</span></div>
+
+      <p class="reveal" style="font-size:1.2rem; margin-bottom:0.5rem;">
+        Calle 1A #16
+      </p>
+      <p class="reveal" style="color: var(--purple-soft);">
+        Piedecuesta, Santander · Colombia 🇨🇴
+      </p>
+
+      <a class="btn-magic reveal"
+         href="https://maps.app.goo.gl/JWMeeiJrYje68CaK6"
+         target="_blank"
+         rel="noopener noreferrer">
+        🗺️ Ver en Google Maps
+      </a>
+    </section>
+
+    <footer>
+      <div class="footer-flowers">🌺 🏮 🌺</div>
+      <p>Con amor, Miley Naela · XV Años</p>
+      <p style="margin-top:0.5rem; font-size:0.75rem; opacity:0.6;">
+        "Con la ilusión de ver el mundo brillar…" — Veo en ti la luz 🎵
+      </p>
+      <p class="admin-trigger" id="admin-trigger" style="margin-top:1.5rem; font-size:0.6rem; opacity:0.25; letter-spacing:0.05em;">
+        · · ·
+      </p>
+    </footer>
+
+  </div>
+
+  <audio id="bg-music" loop preload="auto" autoplay>
+    <source src="audio/Veo en ti la luz.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Panel de administración (solo para la anfitriona) -->
+  <div class="admin-overlay" id="admin-overlay">
+    <div class="admin-panel">
+      <div class="admin-header">
+        <h2>🏰 Confirmaciones</h2>
+        <button class="admin-close" id="admin-close" aria-label="Cerrar">✕</button>
+      </div>
+
+      <div id="admin-login">
+        <p style="text-align:center; margin-bottom:1rem; color:var(--purple-soft);">
+          Ingresa el PIN de administradora
+        </p>
+        <div class="admin-pin-form">
+          <input type="password" id="admin-pin" maxlength="20" placeholder="••••••">
+          <button class="btn-magic" style="width:100%; margin-top:0;" id="admin-login-btn">
+            Entrar
+          </button>
+        </div>
+      </div>
+
+      <div id="admin-content" style="display:none;">
+        <div class="admin-stats">
+          <div class="stat-box">
+            <div class="stat-number" id="stat-confirmados">0</div>
+            <div class="stat-label">Confirmados</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number" id="stat-personas">0</div>
+            <div class="stat-label">Total personas</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number" id="stat-declinados">0</div>
+            <div class="stat-label">No asisten</div>
+          </div>
+        </div>
+
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Asistencia</th>
+                <th>Acomp.</th>
+                <th>Mensaje</th>
+                <th>Fecha</th>
+              </tr>
+            </thead>
+            <tbody id="admin-table-body"></tbody>
+          </table>
+        </div>
+
+        <div class="admin-actions">
+          <button class="btn-admin" id="admin-refresh">🔄 Actualizar</button>
+          <button class="btn-admin" id="admin-export">📥 Exportar CSV</button>
+        </div>
+
+        <p class="admin-hint" id="admin-hint"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ══════════════════════════════════════════════
+    //  CONFIGURACIÓN — Personaliza aquí
+    // ══════════════════════════════════════════════
+    const CONFIG = {
+      // URL de Google Apps Script (ver google-apps-script.gs)
+      googleScriptUrl: '',
+
+      // URL CSV publicada de Google Sheets (para ver confirmaciones)
+      sheetCsvUrl: '',
+
+      // PIN para abrir el panel de administración
+      adminPin: 'xv2025',
+
+      // Clave única del evento (no cambiar si ya hay confirmaciones)
+      storageKey: 'xv-miley-naela-2026',
+
+      // Música local (coloca el MP3 en la carpeta audio/)
+      musicSrc: 'audio/Veo en ti la luz.mp3',
+      musicVolume: 0.4,
+
+      // Fecha y hora del evento (hora local Colombia)
+      eventDate: { year: 2026, month: 7, day: 18, hour: 17, minute: 0 },
+
+      // Enlace de Google Maps del lugar
+      mapsUrl: 'https://maps.app.goo.gl/JWMeeiJrYje68CaK6'
+    };
+    // ── Estrellas ──
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 120; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.setProperty('--dur', (2 + Math.random() * 4) + 's');
+      star.style.setProperty('--delay', Math.random() * 5 + 's');
+      const size = Math.random() > 0.7 ? 3 : 2;
+      star.style.width = star.style.height = size + 'px';
+      starsContainer.appendChild(star);
+    }
+
+    // ── Linternas ──
+    const lanternsContainer = document.getElementById('lanterns');
+    function createLantern() {
+      const lantern = document.createElement('div');
+      lantern.className = 'lantern';
+      const size = 18 + Math.random() * 22;
+      lantern.style.left = Math.random() * 100 + '%';
+      lantern.style.setProperty('--size', size + 'px');
+      lantern.style.setProperty('--drift', (Math.random() * 80 - 40) + 'px');
+      lantern.style.setProperty('--opacity', (0.4 + Math.random() * 0.5).toFixed(2));
+      const duration = 12 + Math.random() * 18;
+      lantern.style.animationDuration = duration + 's';
+      lantern.innerHTML = '<div class="lantern-body"></div>';
+      lanternsContainer.appendChild(lantern);
+      setTimeout(() => lantern.remove(), duration * 1000);
+    }
+    setInterval(createLantern, 1800);
+    for (let i = 0; i < 5; i++) setTimeout(createLantern, i * 400);
+
+    // ── Pétalos dorados ──
+    const petalsContainer = document.getElementById('petals');
+    function createPetal() {
+      const petal = document.createElement('div');
+      petal.className = 'petal';
+      petal.style.left = Math.random() * 100 + '%';
+      petal.style.setProperty('--sway', (Math.random() * 100 - 50) + 'px');
+      const duration = 6 + Math.random() * 8;
+      petal.style.animationDuration = duration + 's';
+      const size = 5 + Math.random() * 6;
+      petal.style.width = petal.style.height = size + 'px';
+      petalsContainer.appendChild(petal);
+      setTimeout(() => petal.remove(), duration * 1000);
+    }
+    setInterval(createPetal, 600);
+
+    // ── Scroll reveal ──
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => observer.observe(el));
+
+    // ── Countdown ──
+    const eventDate = new Date(
+      CONFIG.eventDate.year,
+      CONFIG.eventDate.month - 1,
+      CONFIG.eventDate.day,
+      CONFIG.eventDate.hour,
+      CONFIG.eventDate.minute,
+      0
+    );
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = eventDate - now;
+
+      if (diff <= 0) {
+        document.getElementById('days').textContent = '00';
+        document.getElementById('hours').textContent = '00';
+        document.getElementById('minutes').textContent = '00';
+        document.getElementById('seconds').textContent = '00';
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      document.getElementById('days').textContent = String(days).padStart(2, '0');
+      document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+      document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // ══════════════════════════════════════════════
+    //  RSVP — Confirmación de asistencia
+    // ══════════════════════════════════════════════
+    const rsvpForm = document.getElementById('rsvp-form');
+    const rsvpContainer = document.getElementById('rsvp-container');
+    const rsvpMessage = document.getElementById('rsvp-message');
+    const companionsField = document.getElementById('companions-field');
+    const btnRsvp = document.getElementById('btn-rsvp');
+
+    document.querySelectorAll('input[name="asistencia"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (document.getElementById('asistencia-si').checked) {
+          companionsField.classList.add('show');
+        } else {
+          companionsField.classList.remove('show');
+        }
+      });
+    });
+
+    function getLocalConfirmations() {
+      try {
+        return JSON.parse(localStorage.getItem(CONFIG.storageKey) || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    function saveLocalConfirmation(entry) {
+      const list = getLocalConfirmations();
+      const existing = list.findIndex(c =>
+        c.nombre.toLowerCase() === entry.nombre.toLowerCase()
+      );
+      if (existing >= 0) list[existing] = entry;
+      else list.push(entry);
+      localStorage.setItem(CONFIG.storageKey, JSON.stringify(list));
+    }
+
+    function showAlreadyConfirmed(entry) {
+      rsvpContainer.innerHTML = `
+        <div class="rsvp-already">
+          <div class="check-icon">${entry.asistencia === 'Sí' ? '🎉' : '💜'}</div>
+          <h3 style="font-family:'Cinzel Decorative',serif; color:var(--gold); margin-bottom:0.75rem;">
+            ¡Gracias, ${entry.nombre}!
+          </h3>
+          <p style="color:var(--lavender); line-height:1.6;">
+            ${entry.asistencia === 'Sí'
+              ? `Tu asistencia ya está confirmada${entry.acompanantes > 0 ? ` con ${entry.acompanantes} acompañante(s)` : ''}. ¡Te esperamos!`
+              : 'Lamentamos que no puedas venir. ¡Gracias por avisarnos!'}
+          </p>
+        </div>`;
+    }
+
+    const savedName = localStorage.getItem(CONFIG.storageKey + '-user');
+    if (savedName) {
+      const saved = getLocalConfirmations().find(c =>
+        c.nombre.toLowerCase() === savedName.toLowerCase()
+      );
+      if (saved) showAlreadyConfirmed(saved);
+    }
+
+    rsvpForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      btnRsvp.disabled = true;
+      btnRsvp.textContent = 'Enviando...';
+      rsvpMessage.className = 'rsvp-message';
+      rsvpMessage.style.display = 'none';
+
+      const entry = {
+        fecha: new Date().toLocaleString('es-MX'),
+        nombre: document.getElementById('nombre').value.trim(),
+        asistencia: document.querySelector('input[name="asistencia"]:checked').value,
+        acompanantes: document.getElementById('asistencia-si').checked
+          ? parseInt(document.getElementById('acompanantes').value, 10)
+          : 0,
+        mensaje: document.getElementById('mensaje').value.trim()
+      };
+
+      saveLocalConfirmation(entry);
+      localStorage.setItem(CONFIG.storageKey + '-user', entry.nombre);
+
+      if (CONFIG.googleScriptUrl) {
+        try {
+          await fetch(CONFIG.googleScriptUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify(entry)
+          });
+        } catch (err) {
+          rsvpMessage.textContent = 'Guardado localmente. No se pudo conectar con el servidor.';
+          rsvpMessage.className = 'rsvp-message error';
+        }
+      }
+
+      setTimeout(() => showAlreadyConfirmed(entry), 600);
+    });
+
+    // ══════════════════════════════════════════════
+    //  ADMIN — Panel de confirmaciones
+    // ══════════════════════════════════════════════
+    const adminOverlay = document.getElementById('admin-overlay');
+    const adminLogin = document.getElementById('admin-login');
+    const adminContent = document.getElementById('admin-content');
+    let allConfirmations = [];
+
+    let adminTapCount = 0;
+    document.getElementById('admin-trigger').addEventListener('click', () => {
+      adminTapCount++;
+      if (adminTapCount >= 5) {
+        adminOverlay.classList.add('open');
+        adminTapCount = 0;
+      }
+      setTimeout(() => { adminTapCount = 0; }, 2000);
+    });
+
+    if (location.hash === '#admin') {
+      adminOverlay.classList.add('open');
+    }
+
+    document.getElementById('admin-close').addEventListener('click', () => {
+      adminOverlay.classList.remove('open');
+      history.replaceState(null, '', location.pathname);
+    });
+
+    document.getElementById('admin-login-btn').addEventListener('click', tryAdminLogin);
+    document.getElementById('admin-pin').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') tryAdminLogin();
+    });
+
+    function tryAdminLogin() {
+      const pin = document.getElementById('admin-pin').value;
+      if (pin === CONFIG.adminPin) {
+        adminLogin.style.display = 'none';
+        adminContent.style.display = 'block';
+        loadConfirmations();
+      } else {
+        document.getElementById('admin-pin').value = '';
+        document.getElementById('admin-pin').placeholder = 'PIN incorrecto';
+      }
+    }
+
+    async function loadConfirmations() {
+      allConfirmations = getLocalConfirmations();
+
+      if (CONFIG.sheetCsvUrl) {
+        try {
+          const res = await fetch(CONFIG.sheetCsvUrl);
+          const text = await res.text();
+          const sheetData = parseCSV(text);
+          if (sheetData.length > 0) {
+            allConfirmations = sheetData.map(row => ({
+              fecha: row['Fecha'] || row.fecha || '',
+              nombre: row['Nombre'] || row.nombre || '',
+              asistencia: row['Asistencia'] || row.asistencia || '',
+              acompanantes: parseInt(row['Acompañantes'] || row.acompanantes || 0, 10),
+              mensaje: row['Mensaje'] || row.mensaje || ''
+            }));
+          }
+        } catch (err) {
+          document.getElementById('admin-hint').textContent =
+            'No se pudo cargar Google Sheets. Mostrando datos locales del navegador.';
+        }
+      } else {
+        document.getElementById('admin-hint').textContent =
+          'Modo local: solo se ven confirmaciones de este navegador. Configura Google Sheets en CONFIG para ver todas las confirmaciones de tus invitados.';
+      }
+
+      renderAdminTable();
+    }
+
+    function parseCSV(text) {
+      const lines = text.trim().split('\n');
+      if (lines.length < 2) return [];
+      const headers = parseCSVLine(lines[0]);
+      return lines.slice(1).map(line => {
+        const values = parseCSVLine(line);
+        const obj = {};
+        headers.forEach((h, i) => { obj[h.trim()] = (values[i] || '').trim(); });
+        return obj;
+      });
+    }
+
+    function parseCSVLine(line) {
+      const result = [];
+      let current = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') {
+          inQuotes = !inQuotes;
+        } else if (ch === ',' && !inQuotes) {
+          result.push(current);
+          current = '';
+        } else {
+          current += ch;
+        }
+      }
+      result.push(current);
+      return result;
+    }
+
+    function renderAdminTable() {
+      const tbody = document.getElementById('admin-table-body');
+      const confirmados = allConfirmations.filter(c => c.asistencia === 'Sí');
+      const declinados = allConfirmations.filter(c => c.asistencia === 'No');
+      const totalPersonas = confirmados.reduce((sum, c) => sum + 1 + (c.acompanantes || 0), 0);
+
+      document.getElementById('stat-confirmados').textContent = confirmados.length;
+      document.getElementById('stat-personas').textContent = totalPersonas;
+      document.getElementById('stat-declinados').textContent = declinados.length;
+
+      if (allConfirmations.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="admin-empty">Aún no hay confirmaciones</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = allConfirmations.map(c => `
+        <tr>
+          <td>${escapeHtml(c.nombre)}</td>
+          <td><span class="badge ${c.asistencia === 'Sí' ? 'badge-yes' : 'badge-no'}">${escapeHtml(c.asistencia)}</span></td>
+          <td>${c.asistencia === 'Sí' ? (c.acompanantes || 0) : '—'}</td>
+          <td>${escapeHtml(c.mensaje || '—')}</td>
+          <td style="font-size:0.8rem; white-space:nowrap;">${escapeHtml(c.fecha || '')}</td>
+        </tr>
+      `).join('');
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    document.getElementById('admin-refresh').addEventListener('click', loadConfirmations);
+
+    document.getElementById('admin-export').addEventListener('click', () => {
+      if (allConfirmations.length === 0) return;
+      const headers = ['Fecha', 'Nombre', 'Asistencia', 'Acompañantes', 'Mensaje'];
+      const rows = allConfirmations.map(c =>
+        [c.fecha, c.nombre, c.asistencia, c.acompanantes, c.mensaje]
+          .map(v => `"${String(v || '').replace(/"/g, '""')}"`)
+          .join(',')
+      );
+      const csv = [headers.join(','), ...rows].join('\n');
+      const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'confirmaciones-xv-miley-naela.csv';
+      link.click();
+    });
+
+    // ══════════════════════════════════════════════
+    //  MÚSICA — Veo en ti la luz (archivo local)
+    // ══════════════════════════════════════════════
+    const bgMusic = document.getElementById('bg-music');
+    bgMusic.volume = CONFIG.musicVolume;
+    let musicStarted = false;
+
+    async function startMusic() {
+      if (musicStarted) return;
+      try {
+        await bgMusic.play();
+        musicStarted = true;
+      } catch { /* el navegador bloqueó autoplay */ }
+    }
+
+    startMusic();
+
+    ['click', 'touchstart', 'scroll', 'keydown'].forEach(event => {
+      document.addEventListener(event, startMusic, { once: true, passive: true });
+    });
+  </script>
+</body>
+</html>
