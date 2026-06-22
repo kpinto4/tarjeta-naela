@@ -4,5 +4,5 @@
   functions = "netlify/functions"
 
 [functions]
-  node_bundler = "none"
-  included_files = ["node_modules/@neondatabase/**"]
+  node_bundler = "esbuild"
+  external_node_modules = ["@neondatabase/serverless"]
