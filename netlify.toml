@@ -1,6 +1,8 @@
 [build]
+  command = "npm install"
   publish = "."
   functions = "netlify/functions"
 
 [functions]
-  node_bundler = "esbuild"
+  node_bundler = "none"
+  included_files = ["node_modules/@neondatabase/**"]
