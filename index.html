@@ -1279,20 +1279,6 @@
       return cupo || 1;
     }
 
-    function fetchConTimeout(url, options, ms = 12000) {
-      return Promise.race([
-        fetch(url, options),
-        new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Tiempo de espera agotado. Intenta de nuevo.')), ms)
-        )
-      ]);
-    }
-
-    function resetBtnRsvp() {
-      btnRsvp.disabled = false;
-      btnRsvp.textContent = 'Enviar confirmación ✨';
-    }
-
     async function initRsvp() {
       await initInvitacionPersonalizada();
 
@@ -1317,11 +1303,19 @@
     function saveLocalConfirmation(entry) {
       const list = getLocalConfirmations();
       const existing = list.findIndex(c =>
-        c.nombre.toLowerCase() === entry.nombre.toLowerCase()
+        entry.familia
+          ? c.familia === entry.familia
+          : c.nombre.toLowerCase() === entry.nombre.toLowerCase()
       );
       if (existing >= 0) list[existing] = entry;
       else list.push(entry);
       localStorage.setItem(CONFIG.storageKey, JSON.stringify(list));
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
     }
 
     function showAlreadyConfirmed(entry) {
@@ -1329,7 +1323,7 @@
         <div class="rsvp-already">
           <div class="check-icon">${entry.asistencia === 'Sí' ? '🎉' : '💜'}</div>
           <h3 style="font-family:'Cinzel Decorative',serif; color:var(--gold); margin-bottom:0.75rem;">
-            ¡Gracias, ${entry.nombre}!
+            ¡Gracias, ${escapeHtml(entry.nombre)}!
           </h3>
           <p style="color:var(--lavender); line-height:1.6;">
             ${entry.asistencia === 'Sí'
@@ -1339,7 +1333,25 @@
         </div>`;
     }
 
-    rsvpForm.addEventListener('submit', async (e) => {
+    function enviarAlServidor(entry) {
+      if (!CONFIG.apiUrl) return;
+      const payload = JSON.stringify({
+        nombre: entry.nombre,
+        familia: entry.familia,
+        asistencia: entry.asistencia,
+        personas: entry.personas,
+        mensaje: entry.mensaje
+      });
+
+      fetch(CONFIG.apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: payload,
+        keepalive: true
+      }).catch(() => {});
+    }
+
+    rsvpForm.addEventListener('submit', (e) => {
       e.preventDefault();
 
       const asistenciaEl = document.querySelector('input[name="asistencia"]:checked');
@@ -1349,11 +1361,6 @@
         rsvpMessage.style.display = 'block';
         return;
       }
-
-      btnRsvp.disabled = true;
-      btnRsvp.textContent = 'Enviando...';
-      rsvpMessage.className = 'rsvp-message';
-      rsvpMessage.style.display = 'none';
 
       const familiaId = document.getElementById('familia-id').value.trim();
       const asistenciaSi = document.getElementById('asistencia-si').checked;
@@ -1370,51 +1377,16 @@
         rsvpMessage.textContent = 'Escribe tu nombre.';
         rsvpMessage.className = 'rsvp-message error';
         rsvpMessage.style.display = 'block';
-        resetBtnRsvp();
         return;
       }
 
-      try {
-        if (CONFIG.apiUrl) {
-          const res = await fetchConTimeout(CONFIG.apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              nombre: entry.nombre,
-              familia: entry.familia,
-              asistencia: entry.asistencia,
-              personas: entry.personas,
-              mensaje: entry.mensaje
-            })
-          }, 12000);
-
-          const text = await res.text();
-          let json = {};
-          try {
-            json = text ? JSON.parse(text) : {};
-          } catch {
-            throw new Error('Respuesta inválida del servidor.');
-          }
-
-          if (!res.ok) {
-            throw new Error(json.error || json.detail || `Error ${res.status}`);
-          }
-
-          if (json.data?.fecha) entry.fecha = json.data.fecha;
-        }
-
-        saveLocalConfirmation(entry);
-        localStorage.setItem(
-          CONFIG.storageKey + '-user' + (familiaId ? '-' + familiaId : ''),
-          entry.nombre
-        );
-        showAlreadyConfirmed(entry);
-      } catch (err) {
-        rsvpMessage.textContent = err.message || 'No se pudo guardar. Intenta otra vez.';
-        rsvpMessage.className = 'rsvp-message error';
-        rsvpMessage.style.display = 'block';
-        resetBtnRsvp();
-      }
+      saveLocalConfirmation(entry);
+      localStorage.setItem(
+        CONFIG.storageKey + '-user' + (familiaId ? '-' + familiaId : ''),
+        entry.nombre
+      );
+      enviarAlServidor(entry);
+      showAlreadyConfirmed(entry);
     });
 
     initRsvp();

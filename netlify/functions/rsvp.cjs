@@ -124,7 +124,6 @@ exports.handler = async (event) => {
   }
 
   try {
-    await ensureTable();
     const db = getSql();
 
     if (event.httpMethod === 'POST') {
@@ -152,6 +151,8 @@ exports.handler = async (event) => {
         body: JSON.stringify({ success: true, data: formatRow(rows[0]) })
       };
     }
+
+    await ensureTable();
 
     if (event.httpMethod === 'GET') {
       const rows = await db`
