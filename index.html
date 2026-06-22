@@ -216,6 +216,14 @@
       animation: fadeUp 1s ease 0.3s forwards;
     }
 
+    .hero-subtitle.hero-personal {
+      text-transform: none;
+      letter-spacing: 0.08em;
+      font-size: clamp(1.2rem, 4vw, 1.6rem);
+      color: var(--gold-light);
+      font-style: italic;
+    }
+
     .hero-name {
       font-family: 'Cinzel Decorative', serif;
       font-size: clamp(2.8rem, 10vw, 5.5rem);
@@ -841,7 +849,7 @@
       <div class="hair-strand"></div>
 
       <div class="hero-crown">👑</div>
-      <p class="hero-subtitle">Estás invitado a celebrar</p>
+      <p class="hero-subtitle" id="hero-greeting">Estás invitado a celebrar</p>
       <h1 class="hero-name">Miley Naela</h1>
       <p class="hero-age">Mis XV Años</p>
       <p class="hero-tagline">
@@ -935,6 +943,7 @@
 
       <div id="rsvp-container" class="reveal">
         <form class="rsvp-form" id="rsvp-form">
+          <input type="hidden" id="familia-id" name="familia" value="">
           <div class="form-group">
             <label for="nombre">Tu nombre completo</label>
             <input type="text" id="nombre" name="nombre" required
@@ -956,13 +965,13 @@
           </div>
 
           <div class="form-group companions-field" id="companions-field">
-            <label for="acompanantes">¿Cuántos acompañantes traes?</label>
-            <select id="acompanantes" name="acompanantes">
-              <option value="0">Solo yo</option>
-              <option value="1">1 acompañante</option>
-              <option value="2">2 acompañantes</option>
-              <option value="3">3 acompañantes</option>
-              <option value="4">4 acompañantes</option>
+            <label for="personas">¿Cuántas personas asistirán?</label>
+            <select id="personas" name="personas">
+              <option value="1">1 persona</option>
+              <option value="2">2 personas</option>
+              <option value="3">3 personas</option>
+              <option value="4">4 personas</option>
+              <option value="5">5 personas</option>
             </select>
           </div>
 
@@ -1045,6 +1054,9 @@
       // Clave local para recordar si ya confirmó en este navegador
       storageKey: 'xv-miley-naela-2026',
 
+      // Máximo de personas (invitación general, sin ?f=)
+      defaultMaxPersonas: 5,
+
       // Música local (coloca el MP3 en la carpeta audio/)
       musicSrc: 'audio/Veo en ti la luz.mp3',
       musicVolume: 0.4,
@@ -1055,6 +1067,71 @@
       // Enlace de Google Maps del lugar
       mapsUrl: 'https://maps.app.goo.gl/JWMeeiJrYje68CaK6'
     };
+
+    let invitadoActual = null;
+
+    function getFamiliaParam() {
+      return new URLSearchParams(location.search).get('f');
+    }
+
+    function updatePersonasLimit(maxPersonas) {
+      const select = document.getElementById('personas');
+      const max = Math.max(1, Math.min(20, maxPersonas || CONFIG.defaultMaxPersonas));
+      select.innerHTML = '';
+      for (let i = 1; i <= max; i++) {
+        const opt = document.createElement('option');
+        opt.value = String(i);
+        opt.textContent = i === 1 ? '1 persona' : `${i} personas`;
+        select.appendChild(opt);
+      }
+    }
+
+    async function initInvitacionPersonalizada() {
+      const familiaId = getFamiliaParam();
+      if (!familiaId) {
+        updatePersonasLimit(CONFIG.defaultMaxPersonas);
+        return;
+      }
+
+      try {
+        let familia = null;
+        try {
+          const apiRes = await fetch('/.netlify/functions/familias');
+          const apiData = await apiRes.json();
+          if (apiRes.ok) {
+            familia = (apiData.data || []).find(f => f.id === familiaId);
+          }
+        } catch { /* fallback json */ }
+
+        if (!familia) {
+          const res = await fetch('invitados.json');
+          const data = await res.json();
+          familia = data.familias.find(f => f.id === familiaId);
+        }
+
+        if (!familia) {
+          updatePersonasLimit(CONFIG.defaultMaxPersonas);
+          return;
+        }
+
+        invitadoActual = familia;
+        document.title = `${familia.saludo} · XV Años · Miley Naela`;
+
+        const greeting = document.getElementById('hero-greeting');
+        greeting.textContent = familia.saludo;
+        greeting.classList.add('hero-personal');
+
+        document.getElementById('nombre').value = familia.nombre;
+        document.getElementById('familia-id').value = familia.id;
+
+        updatePersonasLimit(familia.maxPersonas || CONFIG.defaultMaxPersonas);
+      } catch {
+        updatePersonasLimit(CONFIG.defaultMaxPersonas);
+      }
+    }
+
+    initInvitacionPersonalizada();
+
     // ── Estrellas ──
     const starsContainer = document.getElementById('stars');
     for (let i = 0; i < 120; i++) {
@@ -1198,66 +1275,112 @@
           </h3>
           <p style="color:var(--lavender); line-height:1.6;">
             ${entry.asistencia === 'Sí'
-              ? `Tu asistencia ya está confirmada${entry.acompanantes > 0 ? ` con ${entry.acompanantes} acompañante(s)` : ''}. ¡Te esperamos!`
+              ? `Tu asistencia ya está confirmada${entry.personas > 0 ? ` (${entry.personas} persona${entry.personas > 1 ? 's' : ''})` : ''}. ¡Te esperamos!`
               : 'Lamentamos que no puedas venir. ¡Gracias por avisarnos!'}
           </p>
         </div>`;
     }
 
-    const savedName = localStorage.getItem(CONFIG.storageKey + '-user');
-    if (savedName) {
+    const familiaParam = getFamiliaParam();
+    const savedName = localStorage.getItem(CONFIG.storageKey + '-user' + (familiaParam ? '-' + familiaParam : ''));
+    if (savedName || familiaParam) {
       const saved = getLocalConfirmations().find(c =>
-        c.nombre.toLowerCase() === savedName.toLowerCase()
+        familiaParam
+          ? c.familia === familiaParam
+          : c.nombre.toLowerCase() === savedName.toLowerCase()
       );
       if (saved) showAlreadyConfirmed(saved);
     }
 
     rsvpForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      const asistenciaEl = document.querySelector('input[name="asistencia"]:checked');
+      if (!asistenciaEl) {
+        rsvpMessage.textContent = 'Por favor selecciona si asistirás o no.';
+        rsvpMessage.className = 'rsvp-message error';
+        rsvpMessage.style.display = 'block';
+        return;
+      }
+
       btnRsvp.disabled = true;
       btnRsvp.textContent = 'Enviando...';
       rsvpMessage.className = 'rsvp-message';
       rsvpMessage.style.display = 'none';
 
+      const familiaId = document.getElementById('familia-id').value.trim();
       const entry = {
         fecha: new Date().toLocaleString('es-MX'),
         nombre: document.getElementById('nombre').value.trim(),
-        asistencia: document.querySelector('input[name="asistencia"]:checked').value,
-        acompanantes: document.getElementById('asistencia-si').checked
-          ? parseInt(document.getElementById('acompanantes').value, 10)
+        familia: familiaId,
+        asistencia: asistenciaEl.value,
+        personas: document.getElementById('asistencia-si').checked
+          ? parseInt(document.getElementById('personas').value, 10) || 1
           : 0,
         mensaje: document.getElementById('mensaje').value.trim()
       };
 
-      saveLocalConfirmation(entry);
-      localStorage.setItem(CONFIG.storageKey + '-user', entry.nombre);
+      if (!entry.nombre) {
+        rsvpMessage.textContent = 'Escribe tu nombre.';
+        rsvpMessage.className = 'rsvp-message error';
+        rsvpMessage.style.display = 'block';
+        btnRsvp.disabled = false;
+        btnRsvp.textContent = 'Enviar confirmación ✨';
+        return;
+      }
+
+      let ok = false;
 
       if (CONFIG.apiUrl) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 20000);
+
         try {
           const res = await fetch(CONFIG.apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               nombre: entry.nombre,
+              familia: entry.familia,
               asistencia: entry.asistencia,
-              acompanantes: entry.acompanantes,
+              personas: entry.personas,
               mensaje: entry.mensaje
-            })
+            }),
+            signal: controller.signal
           });
-          const json = await res.json();
-          if (!res.ok) throw new Error(json.error || 'Error al guardar');
+
+          const text = await res.text();
+          let json = {};
+          try { json = text ? JSON.parse(text) : {}; } catch {
+            throw new Error('El servidor respondió de forma inesperada. Intenta de nuevo.');
+          }
+
+          if (!res.ok) throw new Error(json.error || json.detail || 'Error al guardar');
+
           if (json.data?.fecha) entry.fecha = json.data.fecha;
+          ok = true;
         } catch (err) {
-          rsvpMessage.textContent = err.message || 'No se pudo guardar la confirmación. Intenta de nuevo.';
+          const msg = err.name === 'AbortError'
+            ? 'Tardó demasiado. Revisa tu conexión e intenta otra vez.'
+            : (err.message || 'No se pudo guardar la confirmación.');
+          rsvpMessage.textContent = msg;
           rsvpMessage.className = 'rsvp-message error';
           rsvpMessage.style.display = 'block';
           btnRsvp.disabled = false;
           btnRsvp.textContent = 'Enviar confirmación ✨';
           return;
+        } finally {
+          clearTimeout(timeoutId);
         }
+      } else {
+        ok = true;
       }
 
-      setTimeout(() => showAlreadyConfirmed(entry), 600);
+      if (ok) {
+        saveLocalConfirmation(entry);
+        localStorage.setItem(CONFIG.storageKey + '-user' + (familiaId ? '-' + familiaId : ''), entry.nombre);
+        setTimeout(() => showAlreadyConfirmed(entry), 400);
+      }
     });
 
     // ══════════════════════════════════════════════

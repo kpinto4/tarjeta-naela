@@ -3,10 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Confirmaciones · XV Años · Miley Naela</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <title>Admin · XV Años · Miley Naela</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --gold: #f4c542;
@@ -15,78 +13,76 @@
       --lavender: #e8d5f2;
       --sky: #1a0f2e;
     }
-
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Cormorant Garamond', Georgia, serif;
       background: radial-gradient(ellipse at 50% 0%, #3d2060 0%, var(--sky) 50%, #0d0618 100%);
       color: var(--lavender);
       min-height: 100vh;
-      padding: 2rem 1rem;
+      padding: 2rem 1rem 3rem;
     }
-
-    .wrap {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
+    .wrap { max-width: 960px; margin: 0 auto; }
     .panel {
       background: linear-gradient(145deg, #2a1845, #1a0f2e);
       border: 1px solid rgba(244, 197, 66, 0.3);
       border-radius: 20px;
       padding: 2rem;
+      margin-bottom: 1.5rem;
     }
-
     h1 {
       font-family: 'Cinzel Decorative', serif;
       color: var(--gold);
-      font-size: clamp(1.4rem, 5vw, 1.8rem);
-      margin-bottom: 0.5rem;
+      font-size: clamp(1.3rem, 5vw, 1.7rem);
+      margin-bottom: 0.35rem;
     }
-
-    .subtitle {
+    h2 {
+      font-family: 'Cinzel Decorative', serif;
+      color: var(--gold);
+      font-size: 1.15rem;
+      margin-bottom: 1rem;
+    }
+    .subtitle { color: var(--purple-soft); margin-bottom: 1.25rem; line-height: 1.5; }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       color: var(--purple-soft);
-      margin-bottom: 1.5rem;
+      margin-bottom: 0.4rem;
     }
-
-    .pin-form input {
+    .form-group input {
       width: 100%;
-      padding: 0.85rem;
+      padding: 0.7rem 0.85rem;
       background: rgba(26, 15, 46, 0.7);
       border: 1px solid rgba(155, 123, 184, 0.4);
       border-radius: 10px;
       color: var(--lavender);
-      font-size: 1.1rem;
-      text-align: center;
-      letter-spacing: 0.3em;
-      margin-bottom: 1rem;
+      font-family: inherit;
+      font-size: 1.05rem;
     }
-
     .btn-magic {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      padding: 1rem 2rem;
+      padding: 0.85rem 1.75rem;
       background: linear-gradient(135deg, var(--gold), #e6a817);
       color: var(--purple-deep);
       font-family: 'Cinzel Decorative', serif;
-      font-size: 0.95rem;
-      letter-spacing: 0.1em;
+      font-size: 0.9rem;
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 4px 20px rgba(244, 197, 66, 0.4);
+      box-shadow: 0 4px 20px rgba(244, 197, 66, 0.35);
     }
-
     .stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
     }
-
     .stat-box {
       background: rgba(92, 61, 122, 0.3);
       border: 1px solid rgba(244, 197, 66, 0.2);
@@ -94,13 +90,11 @@
       padding: 1rem;
       text-align: center;
     }
-
     .stat-number {
       font-family: 'Cinzel Decorative', serif;
       font-size: 1.8rem;
       color: var(--gold);
     }
-
     .stat-label {
       font-size: 0.75rem;
       letter-spacing: 0.1em;
@@ -108,81 +102,58 @@
       color: var(--purple-soft);
       margin-top: 0.25rem;
     }
-
     .table-wrap { overflow-x: auto; margin-bottom: 1rem; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.95rem;
-    }
-
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
     th {
       font-family: 'Cinzel Decorative', serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
       color: var(--gold);
-      padding: 0.75rem 0.5rem;
+      padding: 0.7rem 0.45rem;
       border-bottom: 1px solid rgba(244, 197, 66, 0.3);
       text-align: left;
     }
-
     td {
-      padding: 0.65rem 0.5rem;
+      padding: 0.6rem 0.45rem;
       border-bottom: 1px solid rgba(155, 123, 184, 0.15);
+      vertical-align: middle;
     }
-
     tr:hover td { background: rgba(244, 197, 66, 0.05); }
-
     .badge {
       display: inline-block;
-      padding: 0.2rem 0.6rem;
+      padding: 0.2rem 0.55rem;
       border-radius: 20px;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
     }
-
     .badge-yes { background: rgba(76, 175, 80, 0.2); color: #a5d6a7; }
     .badge-no { background: rgba(244, 67, 54, 0.2); color: #ef9a9a; }
-
-    .actions {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-    }
-
-    .btn-admin {
-      padding: 0.65rem 1.25rem;
+    .actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+    .btn-admin, .btn-sm {
+      padding: 0.45rem 0.75rem;
       background: rgba(92, 61, 122, 0.5);
       border: 1px solid rgba(244, 197, 66, 0.3);
       border-radius: 8px;
       color: var(--lavender);
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    .btn-admin:hover { border-color: var(--gold); color: var(--gold); }
-
-    .hint, .error {
-      margin-top: 1rem;
       font-size: 0.9rem;
-      line-height: 1.6;
-      color: var(--purple-soft);
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
     }
-
+    .btn-admin:hover, .btn-sm:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-sm-wa { border-color: rgba(37, 211, 102, 0.4); }
+    .btn-sm-danger { border-color: rgba(244, 67, 54, 0.35); color: #ef9a9a; }
+    .link-cell { font-size: 0.78rem; word-break: break-all; max-width: 180px; color: var(--purple-soft); }
+    .hint, .error { margin-top: 0.75rem; font-size: 0.9rem; line-height: 1.6; color: var(--purple-soft); }
     .error { color: #ef9a9a; }
-
-    .empty { text-align: center; padding: 2rem; color: var(--purple-soft); }
-
+    .empty { text-align: center; padding: 1.5rem; color: var(--purple-soft); }
     .back-link {
       display: inline-block;
-      margin-top: 1.5rem;
+      margin-top: 0.5rem;
       color: var(--purple-soft);
       text-decoration: none;
     }
-
     .back-link:hover { color: var(--gold); }
-
     @media (max-width: 480px) {
       .stats { grid-template-columns: 1fr; }
       .panel { padding: 1.5rem 1rem; }
@@ -191,49 +162,100 @@
 </head>
 <body>
   <div class="wrap">
+
+    <!-- INVITACIONES POR FAMILIA -->
+    <div class="panel" id="familias">
+      <h1>💌 Invitaciones por familia</h1>
+      <p class="subtitle">Paso 1: agrega todas las familias. Paso 2: envía cada invitación por WhatsApp.</p>
+
+      <form id="familia-form">
+        <input type="hidden" id="f-id" value="">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="f-nombre">Nombre (ej. Familia García)</label>
+            <input type="text" id="f-nombre" required placeholder="Familia García">
+          </div>
+          <div class="form-group">
+            <label for="f-saludo">Saludo en la invitación</label>
+            <input type="text" id="f-saludo" placeholder="Querida Familia García">
+          </div>
+          <div class="form-group">
+            <label for="f-personas">Personas permitidas</label>
+            <input type="number" id="f-personas" min="1" max="20" value="4" required>
+          </div>
+          <div class="form-group">
+            <label for="f-whatsapp">WhatsApp (ej. 3001234567)</label>
+            <input type="tel" id="f-whatsapp" placeholder="3001234567">
+          </div>
+        </div>
+        <div class="actions">
+          <button type="submit" class="btn-magic" id="f-submit-btn">+ Agregar familia</button>
+          <button type="button" class="btn-admin" id="f-cancel-btn" style="display:none;">Cancelar edición</button>
+        </div>
+        <p class="error" id="familia-error" style="display:none;"></p>
+      </form>
+
+      <div class="table-wrap" style="margin-top:1.5rem;">
+        <table>
+          <thead>
+            <tr>
+              <th>Saludo</th>
+              <th>Personas</th>
+              <th>WhatsApp</th>
+              <th>Enlace</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="familias-body">
+            <tr><td colspan="5" class="empty">Cargando familias...</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="hint" id="familias-hint"></p>
+    </div>
+
+    <!-- CONFIRMACIONES -->
     <div class="panel">
       <h1>🏰 Confirmaciones</h1>
-      <p class="subtitle">XV Años Miley Naela</p>
+      <p class="subtitle">Respuestas recibidas de tus invitados.</p>
 
-      <div id="admin-view">
-        <div class="stats">
-          <div class="stat-box">
-            <div class="stat-number" id="stat-confirmados">0</div>
-            <div class="stat-label">Confirmados</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-number" id="stat-personas">0</div>
-            <div class="stat-label">Total personas</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-number" id="stat-declinados">0</div>
-            <div class="stat-label">No asisten</div>
-          </div>
+      <div class="stats">
+        <div class="stat-box">
+          <div class="stat-number" id="stat-confirmados">0</div>
+          <div class="stat-label">Confirmados</div>
         </div>
-
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Asistencia</th>
-                <th>Acomp.</th>
-                <th>Mensaje</th>
-                <th>Fecha</th>
-              </tr>
-            </thead>
-            <tbody id="table-body"></tbody>
-          </table>
+        <div class="stat-box">
+          <div class="stat-number" id="stat-personas">0</div>
+          <div class="stat-label">Total personas</div>
         </div>
-
-        <div class="actions">
-          <button type="button" class="btn-admin" id="btn-refresh">🔄 Actualizar</button>
-          <button type="button" class="btn-admin" id="btn-export">📥 Exportar CSV</button>
+        <div class="stat-box">
+          <div class="stat-number" id="stat-declinados">0</div>
+          <div class="stat-label">No asisten</div>
         </div>
-
-        <p class="hint" id="admin-hint">Cargando...</p>
-        <p class="error" id="load-error" style="display:none;"></p>
       </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Familia</th>
+              <th>Nombre</th>
+              <th>Asistencia</th>
+              <th>Personas</th>
+              <th>Mensaje</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn-admin" id="btn-refresh">🔄 Actualizar</button>
+        <button type="button" class="btn-admin" id="btn-export">📥 Exportar CSV</button>
+      </div>
+      <p class="hint" id="admin-hint">Cargando...</p>
+      <p class="error" id="load-error" style="display:none;"></p>
     </div>
 
     <a class="back-link" href="index.html">← Volver a la invitación</a>
@@ -241,10 +263,15 @@
 
   <script>
     const CONFIG = {
-      apiUrl: '/.netlify/functions/rsvp'
+      rsvpUrl: '/.netlify/functions/rsvp',
+      familiasUrl: '/.netlify/functions/familias',
+      siteUrl: 'https://hilarious-crumble-1d6a6e.netlify.app'
     };
 
+    const siteBase = CONFIG.siteUrl || (location.origin + location.pathname.replace(/admin\.html$/, '').replace(/\/$/, ''));
+
     let allConfirmations = [];
+    let allFamilias = [];
 
     function escapeHtml(str) {
       const div = document.createElement('div');
@@ -252,12 +279,166 @@
       return div.innerHTML;
     }
 
+    function buildInviteLink(id) {
+      return `${siteBase}/?f=${encodeURIComponent(id)}`;
+    }
+
+    function normalizeWhatsApp(num) {
+      const digits = String(num || '').replace(/\D/g, '');
+      if (!digits) return '';
+      if (digits.length === 10 && digits.startsWith('3')) return '57' + digits;
+      return digits;
+    }
+
+    function whatsappInviteUrl(link, saludo, phone) {
+      const msg = `${saludo}, te invito a celebrar los XV Años de Miley Naela 🏮✨\n\nAbre tu invitación:\n${link}`;
+      const wa = normalizeWhatsApp(phone);
+      if (!wa) return '';
+      return `https://wa.me/${wa}?text=${encodeURIComponent(msg)}`;
+    }
+
+    function resetFamiliaForm() {
+      document.getElementById('f-id').value = '';
+      document.getElementById('f-nombre').value = '';
+      document.getElementById('f-saludo').value = '';
+      document.getElementById('f-personas').value = '4';
+      document.getElementById('f-whatsapp').value = '';
+      document.getElementById('f-submit-btn').textContent = '+ Agregar familia';
+      document.getElementById('f-cancel-btn').style.display = 'none';
+    }
+
+    function editFamilia(f) {
+      document.getElementById('f-id').value = f.id;
+      document.getElementById('f-nombre').value = f.nombre;
+      document.getElementById('f-saludo').value = f.saludo;
+      document.getElementById('f-personas').value = f.maxPersonas;
+      document.getElementById('f-whatsapp').value = f.whatsapp || '';
+      document.getElementById('f-submit-btn').textContent = '💾 Guardar cambios';
+      document.getElementById('f-cancel-btn').style.display = 'inline-block';
+      document.getElementById('familias').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function loadFamilias() {
+      try {
+        const res = await fetch(CONFIG.familiasUrl);
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error || 'Error al cargar familias');
+
+        allFamilias = json.data || [];
+        renderFamilias();
+        document.getElementById('familias-hint').textContent =
+          `${allFamilias.length} familia(s) registrada(s).`;
+      } catch (err) {
+        document.getElementById('familias-body').innerHTML =
+          `<tr><td colspan="4" class="empty">${escapeHtml(err.message)}</td></tr>`;
+      }
+    }
+
+    function renderFamilias() {
+      const tbody = document.getElementById('familias-body');
+      if (allFamilias.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty">Aún no hay familias. Agrega la primera arriba.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = allFamilias.map(f => {
+        const link = buildInviteLink(f.id);
+        const waUrl = whatsappInviteUrl(link, f.saludo, f.whatsapp);
+        const waDisplay = f.whatsapp ? escapeHtml(f.whatsapp) : '<span style="color:#ef9a9a">Sin número</span>';
+        return `
+          <tr>
+            <td>
+              <strong style="color:var(--gold);">${escapeHtml(f.saludo)}</strong><br>
+              <span style="font-size:0.85rem;color:var(--purple-soft);">${escapeHtml(f.nombre)}</span>
+            </td>
+            <td>${f.maxPersonas}</td>
+            <td>${waDisplay}</td>
+            <td class="link-cell">${escapeHtml(link)}</td>
+            <td>
+              ${waUrl
+                ? `<a class="btn-sm btn-sm-wa" href="${waUrl}" target="_blank" rel="noopener">📲 Enviar</a>`
+                : `<span class="btn-sm" style="opacity:0.4;cursor:not-allowed;" title="Agrega WhatsApp">📲 Enviar</span>`}
+              <button type="button" class="btn-sm" data-copy="${escapeHtml(link)}">📋</button>
+              <button type="button" class="btn-sm" data-edit="${escapeHtml(f.id)}">✏️</button>
+              <button type="button" class="btn-sm btn-sm-danger" data-delete="${escapeHtml(f.id)}">✕</button>
+            </td>
+          </tr>`;
+      }).join('');
+
+      tbody.querySelectorAll('[data-edit]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const f = allFamilias.find(x => x.id === btn.dataset.edit);
+          if (f) editFamilia(f);
+        });
+      });
+
+      tbody.querySelectorAll('[data-copy]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          await navigator.clipboard.writeText(btn.dataset.copy);
+          btn.textContent = '✓';
+          setTimeout(() => { btn.textContent = '📋 Copiar'; }, 2000);
+        });
+      });
+
+      tbody.querySelectorAll('[data-delete]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('¿Eliminar esta familia?')) return;
+          await fetch(`${CONFIG.familiasUrl}?id=${encodeURIComponent(btn.dataset.delete)}`, {
+            method: 'DELETE'
+          });
+          loadFamilias();
+        });
+      });
+    }
+
+    document.getElementById('f-nombre').addEventListener('blur', () => {
+      const saludo = document.getElementById('f-saludo');
+      const nombre = document.getElementById('f-nombre').value.trim();
+      if (nombre && !saludo.value.trim()) {
+        saludo.value = nombre.toLowerCase().startsWith('familia') || nombre.toLowerCase().startsWith('los')
+          ? `Querida ${nombre}`
+          : `Querida Familia ${nombre}`;
+      }
+    });
+
+    document.getElementById('familia-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errEl = document.getElementById('familia-error');
+      errEl.style.display = 'none';
+
+      const payload = {
+        id: document.getElementById('f-id').value.trim() || undefined,
+        nombre: document.getElementById('f-nombre').value.trim(),
+        saludo: document.getElementById('f-saludo').value.trim(),
+        maxPersonas: parseInt(document.getElementById('f-personas').value, 10),
+        whatsapp: document.getElementById('f-whatsapp').value.trim()
+      };
+
+      try {
+        const res = await fetch(CONFIG.familiasUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error || 'Error al guardar');
+
+        resetFamiliaForm();
+        loadFamilias();
+      } catch (err) {
+        errEl.textContent = err.message;
+        errEl.style.display = 'block';
+      }
+    });
+
+    document.getElementById('f-cancel-btn').addEventListener('click', resetFamiliaForm);
+
     async function loadConfirmations() {
       document.getElementById('admin-hint').textContent = 'Cargando...';
       document.getElementById('load-error').style.display = 'none';
 
       try {
-        const res = await fetch(CONFIG.apiUrl);
+        const res = await fetch(CONFIG.rsvpUrl);
         const json = await res.json();
         if (!res.ok) throw new Error(json.error || 'Error al cargar');
 
@@ -268,7 +449,7 @@
       } catch (err) {
         document.getElementById('admin-hint').textContent = '';
         const errEl = document.getElementById('load-error');
-        errEl.textContent = err.message || 'No se pudo conectar. ¿Configuraste DATABASE_URL en Netlify?';
+        errEl.textContent = err.message;
         errEl.style.display = 'block';
       }
     }
@@ -277,35 +458,39 @@
       const tbody = document.getElementById('table-body');
       const confirmados = allConfirmations.filter(c => c.asistencia === 'Sí');
       const declinados = allConfirmations.filter(c => c.asistencia === 'No');
-      const totalPersonas = confirmados.reduce((sum, c) => sum + 1 + (c.acompanantes || 0), 0);
+      const totalPersonas = confirmados.reduce((sum, c) => sum + (c.personas || 0), 0);
 
       document.getElementById('stat-confirmados').textContent = confirmados.length;
       document.getElementById('stat-personas').textContent = totalPersonas;
       document.getElementById('stat-declinados').textContent = declinados.length;
 
       if (allConfirmations.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="empty">Aún no hay confirmaciones</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="empty">Aún no hay confirmaciones</td></tr>';
         return;
       }
 
       tbody.innerHTML = allConfirmations.map(c => `
         <tr>
+          <td>${escapeHtml(c.familia || '—')}</td>
           <td>${escapeHtml(c.nombre)}</td>
           <td><span class="badge ${c.asistencia === 'Sí' ? 'badge-yes' : 'badge-no'}">${escapeHtml(c.asistencia)}</span></td>
-          <td>${c.asistencia === 'Sí' ? (c.acompanantes || 0) : '—'}</td>
+          <td>${c.asistencia === 'Sí' ? (c.personas || 0) : '—'}</td>
           <td>${escapeHtml(c.mensaje || '—')}</td>
-          <td style="font-size:0.8rem; white-space:nowrap;">${escapeHtml(c.fecha || '')}</td>
+          <td style="font-size:0.8rem;white-space:nowrap;">${escapeHtml(c.fecha || '')}</td>
         </tr>
       `).join('');
     }
 
-    document.getElementById('btn-refresh').addEventListener('click', loadConfirmations);
+    document.getElementById('btn-refresh').addEventListener('click', () => {
+      loadConfirmations();
+      loadFamilias();
+    });
 
     document.getElementById('btn-export').addEventListener('click', () => {
       if (allConfirmations.length === 0) return;
-      const headers = ['Fecha', 'Nombre', 'Asistencia', 'Acompañantes', 'Mensaje'];
+      const headers = ['Fecha', 'Familia', 'Nombre', 'Asistencia', 'Personas', 'Mensaje'];
       const rows = allConfirmations.map(c =>
-        [c.fecha, c.nombre, c.asistencia, c.acompanantes, c.mensaje]
+        [c.fecha, c.familia, c.nombre, c.asistencia, c.personas, c.mensaje]
           .map(v => `"${String(v || '').replace(/"/g, '""')}"`)
           .join(',')
       );
@@ -317,6 +502,7 @@
       link.click();
     });
 
+    loadFamilias();
     loadConfirmations();
   </script>
 </body>

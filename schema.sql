@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS confirmaciones (
   nombre VARCHAR(255) NOT NULL,
   nombre_key VARCHAR(255) NOT NULL UNIQUE,
   asistencia VARCHAR(10) NOT NULL CHECK (asistencia IN ('Sí', 'No')),
-  acompanantes INTEGER NOT NULL DEFAULT 0 CHECK (acompanantes >= 0 AND acompanantes <= 10),
+  personas INTEGER NOT NULL DEFAULT 0 CHECK (personas >= 0 AND personas <= 20),
   mensaje TEXT NOT NULL DEFAULT '',
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()

@@ -1,0 +1,23 @@
+{
+  "baseUrl": "https://hilarious-crumble-1d6a6e.netlify.app",
+  "familias": [
+    {
+      "id": "garcia",
+      "nombre": "Familia García",
+      "saludo": "Querida Familia García",
+      "maxPersonas": 4
+    },
+    {
+      "id": "lopez",
+      "nombre": "Familia López",
+      "saludo": "Querida Familia López",
+      "maxPersonas": 4
+    },
+    {
+      "id": "rodriguez",
+      "nombre": "Familia Rodríguez",
+      "saludo": "Queridos Rodríguez",
+      "maxPersonas": 3
+    }
+  ]
+}

@@ -35,6 +35,7 @@ async function ensureTable() {
       id SERIAL PRIMARY KEY,
       nombre VARCHAR(255) NOT NULL,
       nombre_key VARCHAR(255) NOT NULL UNIQUE,
+      familia VARCHAR(100) NOT NULL DEFAULT '',
       asistencia VARCHAR(10) NOT NULL CHECK (asistencia IN ('Sí', 'No')),
       acompanantes INTEGER NOT NULL DEFAULT 0 CHECK (acompanantes >= 0 AND acompanantes <= 10),
       mensaje TEXT NOT NULL DEFAULT '',
@@ -42,6 +43,9 @@ async function ensureTable() {
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `;
+  await db`ALTER TABLE confirmaciones ADD COLUMN IF NOT EXISTS familia VARCHAR(100) NOT NULL DEFAULT ''`;
+  await db`ALTER TABLE confirmaciones ADD COLUMN IF NOT EXISTS personas INTEGER NOT NULL DEFAULT 0`;
+  await db`ALTER TABLE confirmaciones ADD COLUMN IF NOT EXISTS acompanantes INTEGER NOT NULL DEFAULT 0`;
 }
 
 function parseBody(body) {
@@ -58,34 +62,46 @@ function parseBody(body) {
 
 function validateEntry(data) {
   const nombre = String(data.nombre || '').trim();
+  const familia = String(data.familia || '').trim();
   const asistencia = String(data.asistencia || '').trim();
   const mensaje = String(data.mensaje || '').trim();
-  let acompanantes = Number.parseInt(data.acompanantes, 10);
+  let personas = Number.parseInt(data.personas, 10);
 
   if (!nombre || nombre.length > 255) return { error: 'Nombre inválido' };
   if (!['Sí', 'No'].includes(asistencia)) return { error: 'Asistencia inválida' };
-  if (Number.isNaN(acompanantes)) acompanantes = 0;
-  if (asistencia === 'No') acompanantes = 0;
-  if (acompanantes < 0 || acompanantes > 10) return { error: 'Número de acompañantes inválido' };
+  if (asistencia === 'No') {
+    personas = 0;
+  } else {
+    if (Number.isNaN(personas)) personas = 1;
+    if (personas < 1 || personas > 20) return { error: 'Número de personas inválido' };
+  }
   if (mensaje.length > 1000) return { error: 'Mensaje demasiado largo' };
+
+  const nombre_key = familia ? `f:${familia}` : nombre.toLowerCase();
 
   return {
     entry: {
       nombre,
-      nombre_key: nombre.toLowerCase(),
+      nombre_key,
+      familia,
       asistencia,
-      acompanantes,
+      personas,
       mensaje
     }
   };
 }
 
 function formatRow(row) {
+  const personas = row.personas > 0
+    ? row.personas
+    : (row.asistencia === 'Sí' ? 1 + (row.acompanantes || 0) : 0);
+
   return {
     id: row.id,
     nombre: row.nombre,
+    familia: row.familia || '',
     asistencia: row.asistencia,
-    acompanantes: row.acompanantes,
+    personas,
     mensaje: row.mensaje,
     fecha: new Date(row.updated_at || row.created_at).toLocaleString('es-CO', {
       timeZone: 'America/Bogota'
@@ -111,15 +127,16 @@ exports.handler = async (event) => {
       }
 
       const rows = await db`
-        INSERT INTO confirmaciones (nombre, nombre_key, asistencia, acompanantes, mensaje)
-        VALUES (${entry.nombre}, ${entry.nombre_key}, ${entry.asistencia}, ${entry.acompanantes}, ${entry.mensaje})
+        INSERT INTO confirmaciones (nombre, nombre_key, familia, asistencia, personas, mensaje)
+        VALUES (${entry.nombre}, ${entry.nombre_key}, ${entry.familia}, ${entry.asistencia}, ${entry.personas}, ${entry.mensaje})
         ON CONFLICT (nombre_key) DO UPDATE SET
           nombre = EXCLUDED.nombre,
+          familia = EXCLUDED.familia,
           asistencia = EXCLUDED.asistencia,
-          acompanantes = EXCLUDED.acompanantes,
+          personas = EXCLUDED.personas,
           mensaje = EXCLUDED.mensaje,
           updated_at = NOW()
-        RETURNING id, nombre, asistencia, acompanantes, mensaje, created_at, updated_at
+        RETURNING id, nombre, familia, asistencia, personas, acompanantes, mensaje, created_at, updated_at
       `;
 
       return {
@@ -131,7 +148,7 @@ exports.handler = async (event) => {
 
     if (event.httpMethod === 'GET') {
       const rows = await db`
-        SELECT id, nombre, asistencia, acompanantes, mensaje, created_at, updated_at
+        SELECT id, nombre, familia, asistencia, personas, acompanantes, mensaje, created_at, updated_at
         FROM confirmaciones
         ORDER BY updated_at DESC
       `;
