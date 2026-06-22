@@ -22,6 +22,7 @@ function corsHeaders() {
 }
 
 let sql;
+let tableReady = false;
 
 function getSql() {
   if (!sql) sql = neon(getDatabaseUrl());
@@ -29,6 +30,7 @@ function getSql() {
 }
 
 async function ensureTable() {
+  if (tableReady) return;
   const db = getSql();
   await db`
     CREATE TABLE IF NOT EXISTS confirmaciones (
@@ -37,7 +39,7 @@ async function ensureTable() {
       nombre_key VARCHAR(255) NOT NULL UNIQUE,
       familia VARCHAR(100) NOT NULL DEFAULT '',
       asistencia VARCHAR(10) NOT NULL CHECK (asistencia IN ('Sí', 'No')),
-      acompanantes INTEGER NOT NULL DEFAULT 0 CHECK (acompanantes >= 0 AND acompanantes <= 10),
+      acompanantes INTEGER NOT NULL DEFAULT 0,
       mensaje TEXT NOT NULL DEFAULT '',
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -45,19 +47,23 @@ async function ensureTable() {
   `;
   await db`ALTER TABLE confirmaciones ADD COLUMN IF NOT EXISTS familia VARCHAR(100) NOT NULL DEFAULT ''`;
   await db`ALTER TABLE confirmaciones ADD COLUMN IF NOT EXISTS personas INTEGER NOT NULL DEFAULT 0`;
-  await db`ALTER TABLE confirmaciones ADD COLUMN IF NOT EXISTS acompanantes INTEGER NOT NULL DEFAULT 0`;
+  tableReady = true;
 }
 
-function parseBody(body) {
-  if (!body) return {};
-  if (typeof body === 'string') {
+function parseBody(event) {
+  let raw = event.body;
+  if (!raw) return {};
+  if (event.isBase64Encoded) {
+    raw = Buffer.from(raw, 'base64').toString('utf8');
+  }
+  if (typeof raw === 'string') {
     try {
-      return JSON.parse(body);
+      return JSON.parse(raw);
     } catch {
       return {};
     }
   }
-  return body;
+  return raw;
 }
 
 function validateEntry(data) {
@@ -92,9 +98,10 @@ function validateEntry(data) {
 }
 
 function formatRow(row) {
-  const personas = row.personas > 0
-    ? row.personas
-    : (row.asistencia === 'Sí' ? 1 + (row.acompanantes || 0) : 0);
+  if (!row) return null;
+  const personas = Number(row.personas) > 0
+    ? Number(row.personas)
+    : (row.asistencia === 'Sí' ? 1 + Number(row.acompanantes || 0) : 0);
 
   return {
     id: row.id,
@@ -121,7 +128,7 @@ exports.handler = async (event) => {
     const db = getSql();
 
     if (event.httpMethod === 'POST') {
-      const { entry, error } = validateEntry(parseBody(event.body));
+      const { entry, error } = validateEntry(parseBody(event));
       if (error) {
         return { statusCode: 400, headers, body: JSON.stringify({ error }) };
       }
@@ -136,7 +143,7 @@ exports.handler = async (event) => {
           personas = EXCLUDED.personas,
           mensaje = EXCLUDED.mensaje,
           updated_at = NOW()
-        RETURNING id, nombre, familia, asistencia, personas, acompanantes, mensaje, created_at, updated_at
+        RETURNING id, nombre, familia, asistencia, personas, mensaje, created_at, updated_at
       `;
 
       return {
@@ -148,7 +155,7 @@ exports.handler = async (event) => {
 
     if (event.httpMethod === 'GET') {
       const rows = await db`
-        SELECT id, nombre, familia, asistencia, personas, acompanantes, mensaje, created_at, updated_at
+        SELECT id, nombre, familia, asistencia, personas, mensaje, created_at, updated_at
         FROM confirmaciones
         ORDER BY updated_at DESC
       `;

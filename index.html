@@ -1274,8 +1274,23 @@
 
     function getPersonasConfirmadas(asistenciaSi) {
       if (!asistenciaSi) return 0;
+      const cupo = parseInt(document.getElementById('personas').value, 10);
       if (invitadoActual?.maxPersonas) return invitadoActual.maxPersonas;
-      return parseInt(document.getElementById('personas').value, 10) || 1;
+      return cupo || 1;
+    }
+
+    function fetchConTimeout(url, options, ms = 12000) {
+      return Promise.race([
+        fetch(url, options),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Tiempo de espera agotado. Intenta de nuevo.')), ms)
+        )
+      ]);
+    }
+
+    function resetBtnRsvp() {
+      btnRsvp.disabled = false;
+      btnRsvp.textContent = 'Enviar confirmación ✨';
     }
 
     async function initRsvp() {
@@ -1341,12 +1356,13 @@
       rsvpMessage.style.display = 'none';
 
       const familiaId = document.getElementById('familia-id').value.trim();
+      const asistenciaSi = document.getElementById('asistencia-si').checked;
       const entry = {
         fecha: new Date().toLocaleString('es-MX'),
         nombre: document.getElementById('nombre').value.trim(),
         familia: familiaId,
         asistencia: asistenciaEl.value,
-        personas: getPersonasConfirmadas(document.getElementById('asistencia-si').checked),
+        personas: getPersonasConfirmadas(asistenciaSi),
         mensaje: document.getElementById('mensaje').value.trim()
       };
 
@@ -1354,19 +1370,13 @@
         rsvpMessage.textContent = 'Escribe tu nombre.';
         rsvpMessage.className = 'rsvp-message error';
         rsvpMessage.style.display = 'block';
-        btnRsvp.disabled = false;
-        btnRsvp.textContent = 'Enviar confirmación ✨';
+        resetBtnRsvp();
         return;
       }
 
-      let ok = false;
-
-      if (CONFIG.apiUrl) {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 20000);
-
-        try {
-          const res = await fetch(CONFIG.apiUrl, {
+      try {
+        if (CONFIG.apiUrl) {
+          const res = await fetchConTimeout(CONFIG.apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -1375,41 +1385,35 @@
               asistencia: entry.asistencia,
               personas: entry.personas,
               mensaje: entry.mensaje
-            }),
-            signal: controller.signal
-          });
+            })
+          }, 12000);
 
           const text = await res.text();
           let json = {};
-          try { json = text ? JSON.parse(text) : {}; } catch {
-            throw new Error('El servidor respondió de forma inesperada. Intenta de nuevo.');
+          try {
+            json = text ? JSON.parse(text) : {};
+          } catch {
+            throw new Error('Respuesta inválida del servidor.');
           }
 
-          if (!res.ok) throw new Error(json.error || json.detail || 'Error al guardar');
+          if (!res.ok) {
+            throw new Error(json.error || json.detail || `Error ${res.status}`);
+          }
 
           if (json.data?.fecha) entry.fecha = json.data.fecha;
-          ok = true;
-        } catch (err) {
-          const msg = err.name === 'AbortError'
-            ? 'Tardó demasiado. Revisa tu conexión e intenta otra vez.'
-            : (err.message || 'No se pudo guardar la confirmación.');
-          rsvpMessage.textContent = msg;
-          rsvpMessage.className = 'rsvp-message error';
-          rsvpMessage.style.display = 'block';
-          btnRsvp.disabled = false;
-          btnRsvp.textContent = 'Enviar confirmación ✨';
-          return;
-        } finally {
-          clearTimeout(timeoutId);
         }
-      } else {
-        ok = true;
-      }
 
-      if (ok) {
         saveLocalConfirmation(entry);
-        localStorage.setItem(CONFIG.storageKey + '-user' + (familiaId ? '-' + familiaId : ''), entry.nombre);
-        setTimeout(() => showAlreadyConfirmed(entry), 400);
+        localStorage.setItem(
+          CONFIG.storageKey + '-user' + (familiaId ? '-' + familiaId : ''),
+          entry.nombre
+        );
+        showAlreadyConfirmed(entry);
+      } catch (err) {
+        rsvpMessage.textContent = err.message || 'No se pudo guardar. Intenta otra vez.';
+        rsvpMessage.className = 'rsvp-message error';
+        rsvpMessage.style.display = 'block';
+        resetBtnRsvp();
       }
     });
 

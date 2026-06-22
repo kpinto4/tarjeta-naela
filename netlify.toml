@@ -6,3 +6,9 @@
 [functions]
   node_bundler = "esbuild"
   external_node_modules = ["@neondatabase/serverless"]
+
+[functions.rsvp]
+  timeout = 26
+
+[functions.familias]
+  timeout = 26
