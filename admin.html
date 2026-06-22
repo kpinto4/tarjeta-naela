@@ -193,20 +193,9 @@
   <div class="wrap">
     <div class="panel">
       <h1>🏰 Confirmaciones</h1>
-      <p class="subtitle">Panel de administración · XV Años Miley Naela</p>
+      <p class="subtitle">XV Años Miley Naela</p>
 
-      <div id="login-view">
-        <p style="text-align:center; margin-bottom:1rem; color:var(--purple-soft);">
-          Ingresa el PIN de administradora
-        </p>
-        <div class="pin-form">
-          <input type="password" id="admin-pin" maxlength="20" placeholder="••••••">
-          <button type="button" class="btn-magic" id="login-btn">Entrar</button>
-        </div>
-        <p class="error" id="login-error" style="display:none;"></p>
-      </div>
-
-      <div id="admin-view" style="display:none;">
+      <div id="admin-view">
         <div class="stats">
           <div class="stat-box">
             <div class="stat-number" id="stat-confirmados">0</div>
@@ -240,10 +229,10 @@
         <div class="actions">
           <button type="button" class="btn-admin" id="btn-refresh">🔄 Actualizar</button>
           <button type="button" class="btn-admin" id="btn-export">📥 Exportar CSV</button>
-          <button type="button" class="btn-admin" id="btn-logout">Salir</button>
         </div>
 
-        <p class="hint" id="admin-hint"></p>
+        <p class="hint" id="admin-hint">Cargando...</p>
+        <p class="error" id="load-error" style="display:none;"></p>
       </div>
     </div>
 
@@ -252,17 +241,10 @@
 
   <script>
     const CONFIG = {
-      // API de confirmaciones (Neon + Netlify Functions)
       apiUrl: '/.netlify/functions/rsvp'
     };
 
-    const SESSION_KEY = 'xv-admin-pin';
     let allConfirmations = [];
-    let adminPin = sessionStorage.getItem(SESSION_KEY) || '';
-
-    const loginView = document.getElementById('login-view');
-    const adminView = document.getElementById('admin-view');
-    const loginError = document.getElementById('login-error');
 
     function escapeHtml(str) {
       const div = document.createElement('div');
@@ -270,47 +252,24 @@
       return div.innerHTML;
     }
 
-    function showAdmin() {
-      loginView.style.display = 'none';
-      adminView.style.display = 'block';
-      loginError.style.display = 'none';
-    }
-
-    function showLogin(message) {
-      loginView.style.display = 'block';
-      adminView.style.display = 'none';
-      if (message) {
-        loginError.textContent = message;
-        loginError.style.display = 'block';
-      }
-    }
-
     async function loadConfirmations() {
       document.getElementById('admin-hint').textContent = 'Cargando...';
+      document.getElementById('load-error').style.display = 'none';
 
       try {
-        const res = await fetch(CONFIG.apiUrl, {
-          headers: { 'X-Admin-Pin': adminPin }
-        });
+        const res = await fetch(CONFIG.apiUrl);
         const json = await res.json();
-
-        if (res.status === 401) {
-          sessionStorage.removeItem(SESSION_KEY);
-          adminPin = '';
-          showLogin('PIN incorrecto o sesión expirada');
-          return;
-        }
-
         if (!res.ok) throw new Error(json.error || 'Error al cargar');
 
         allConfirmations = json.data || [];
         document.getElementById('admin-hint').textContent =
-          `${allConfirmations.length} confirmación(es) en la base de datos Neon.`;
+          `${allConfirmations.length} confirmación(es).`;
         renderTable();
       } catch (err) {
         document.getElementById('admin-hint').textContent = '';
-        loginError.textContent = err.message || 'No se pudo conectar con la API';
-        loginError.style.display = 'block';
+        const errEl = document.getElementById('load-error');
+        errEl.textContent = err.message || 'No se pudo conectar. ¿Configuraste DATABASE_URL en Netlify?';
+        errEl.style.display = 'block';
       }
     }
 
@@ -340,20 +299,6 @@
       `).join('');
     }
 
-    async function tryLogin() {
-      adminPin = document.getElementById('admin-pin').value.trim();
-      if (!adminPin) return;
-
-      sessionStorage.setItem(SESSION_KEY, adminPin);
-      showAdmin();
-      await loadConfirmations();
-    }
-
-    document.getElementById('login-btn').addEventListener('click', tryLogin);
-    document.getElementById('admin-pin').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') tryLogin();
-    });
-
     document.getElementById('btn-refresh').addEventListener('click', loadConfirmations);
 
     document.getElementById('btn-export').addEventListener('click', () => {
@@ -372,17 +317,7 @@
       link.click();
     });
 
-    document.getElementById('btn-logout').addEventListener('click', () => {
-      sessionStorage.removeItem(SESSION_KEY);
-      adminPin = '';
-      document.getElementById('admin-pin').value = '';
-      showLogin();
-    });
-
-    if (adminPin) {
-      showAdmin();
-      loadConfirmations();
-    }
+    loadConfirmations();
   </script>
 </body>
 </html>
