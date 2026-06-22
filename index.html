@@ -489,45 +489,6 @@
       margin-top: 1.5rem;
     }
 
-    .dress-code {
-      margin-top: 2rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid rgba(244, 197, 66, 0.2);
-    }
-
-    .dress-code h3 {
-      font-family: 'Cinzel Decorative', serif;
-      color: var(--gold);
-      font-size: 1rem;
-      letter-spacing: 0.15em;
-      margin-bottom: 0.5rem;
-    }
-
-    .dress-colors {
-      display: flex;
-      justify-content: center;
-      gap: 0.75rem;
-      margin-top: 0.75rem;
-    }
-
-    .color-dot {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.3);
-      animation: colorPulse 2s ease-in-out infinite;
-    }
-
-    .color-dot:nth-child(1) { background: var(--purple-mid); animation-delay: 0s; }
-    .color-dot:nth-child(2) { background: var(--gold); animation-delay: 0.3s; }
-    .color-dot:nth-child(3) { background: var(--pink); animation-delay: 0.6s; }
-    .color-dot:nth-child(4) { background: var(--lavender); animation-delay: 0.9s; }
-
-    @keyframes colorPulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.15); }
-    }
-
     /* ── Mapa / botón ── */
     .map-section {
       text-align: center;
@@ -745,195 +706,6 @@
       animation: bounce 2s ease-in-out infinite;
     }
 
-    /* ── Panel Admin ── */
-    .admin-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      background: rgba(13, 6, 24, 0.95);
-      backdrop-filter: blur(8px);
-      overflow-y: auto;
-      padding: 2rem 1rem;
-    }
-
-    .admin-overlay.open {
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-    }
-
-    .admin-panel {
-      background: linear-gradient(145deg, #2a1845, #1a0f2e);
-      border: 1px solid rgba(244, 197, 66, 0.3);
-      border-radius: 20px;
-      padding: 2rem;
-      max-width: 800px;
-      width: 100%;
-      margin: auto;
-    }
-
-    .admin-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .admin-header h2 {
-      font-family: 'Cinzel Decorative', serif;
-      color: var(--gold);
-      font-size: 1.4rem;
-    }
-
-    .admin-close {
-      background: none;
-      border: 1px solid var(--purple-soft);
-      color: var(--lavender);
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 1.2rem;
-      transition: border-color 0.3s;
-    }
-
-    .admin-close:hover {
-      border-color: var(--gold);
-      color: var(--gold);
-    }
-
-    .admin-pin-form input {
-      width: 100%;
-      padding: 0.85rem;
-      background: rgba(26, 15, 46, 0.7);
-      border: 1px solid rgba(155, 123, 184, 0.4);
-      border-radius: 10px;
-      color: var(--lavender);
-      font-size: 1.1rem;
-      text-align: center;
-      letter-spacing: 0.3em;
-      margin-bottom: 1rem;
-    }
-
-    .admin-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .stat-box {
-      background: rgba(92, 61, 122, 0.3);
-      border: 1px solid rgba(244, 197, 66, 0.2);
-      border-radius: 12px;
-      padding: 1rem;
-      text-align: center;
-    }
-
-    .stat-number {
-      font-family: 'Cinzel Decorative', serif;
-      font-size: 1.8rem;
-      color: var(--gold);
-    }
-
-    .stat-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--purple-soft);
-      margin-top: 0.25rem;
-    }
-
-    .admin-table-wrap {
-      overflow-x: auto;
-      margin-bottom: 1rem;
-    }
-
-    .admin-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.95rem;
-    }
-
-    .admin-table th {
-      font-family: 'Cinzel Decorative', serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
-      color: var(--gold);
-      padding: 0.75rem 0.5rem;
-      border-bottom: 1px solid rgba(244, 197, 66, 0.3);
-      text-align: left;
-    }
-
-    .admin-table td {
-      padding: 0.65rem 0.5rem;
-      border-bottom: 1px solid rgba(155, 123, 184, 0.15);
-      color: var(--lavender);
-    }
-
-    .admin-table tr:hover td {
-      background: rgba(244, 197, 66, 0.05);
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-    }
-
-    .badge-yes {
-      background: rgba(76, 175, 80, 0.2);
-      color: #a5d6a7;
-    }
-
-    .badge-no {
-      background: rgba(244, 67, 54, 0.2);
-      color: #ef9a9a;
-    }
-
-    .admin-actions {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-    }
-
-    .btn-admin {
-      padding: 0.65rem 1.25rem;
-      background: rgba(92, 61, 122, 0.5);
-      border: 1px solid rgba(244, 197, 66, 0.3);
-      border-radius: 8px;
-      color: var(--lavender);
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .btn-admin:hover {
-      border-color: var(--gold);
-      color: var(--gold);
-    }
-
-    .admin-empty {
-      text-align: center;
-      padding: 2rem;
-      color: var(--purple-soft);
-    }
-
-    .admin-hint {
-      font-size: 0.85rem;
-      color: var(--purple-soft);
-      margin-top: 1rem;
-      line-height: 1.6;
-    }
-
-    footer .admin-trigger {
-      cursor: default;
-      user-select: none;
-    }
-
     /* ── Pantalla de entrada + control de música ── */
     .music-splash {
       position: fixed;
@@ -1025,7 +797,6 @@
     @media (max-width: 480px) {
       .detail-card { padding: 1.5rem 1rem; }
       .countdown-item { min-width: 60px; padding: 0.75rem; }
-      .admin-stats { grid-template-columns: 1fr; }
       .rsvp-form { padding: 1.75rem 1.25rem; }
     }
   </style>
@@ -1154,17 +925,6 @@
         <p class="quote">
           "Veo en ti la luz brillar, y te invito a ser parte de mi cuento de hadas."
         </p>
-
-        <div class="dress-code">
-          <h3>Código de Vestimenta</h3>
-          <p>Elegante · Colores sugeridos:</p>
-          <div class="dress-colors">
-            <div class="color-dot" title="Morado"></div>
-            <div class="color-dot" title="Dorado"></div>
-            <div class="color-dot" title="Rosa"></div>
-            <div class="color-dot" title="Lavanda"></div>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -1247,9 +1007,6 @@
       <p style="margin-top:0.5rem; font-size:0.75rem; opacity:0.6;">
         "Con la ilusión de ver el mundo brillar…" — Veo en ti la luz 🎵
       </p>
-      <p class="admin-trigger" id="admin-trigger" style="margin-top:1.5rem; font-size:0.6rem; opacity:0.25; letter-spacing:0.05em;">
-        · · ·
-      </p>
     </footer>
 
   </div>
@@ -1277,82 +1034,15 @@
     <source src="audio/Veo en ti la luz.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Panel de administración (solo para la anfitriona) -->
-  <div class="admin-overlay" id="admin-overlay">
-    <div class="admin-panel">
-      <div class="admin-header">
-        <h2>🏰 Confirmaciones</h2>
-        <button class="admin-close" id="admin-close" aria-label="Cerrar">✕</button>
-      </div>
-
-      <div id="admin-login">
-        <p style="text-align:center; margin-bottom:1rem; color:var(--purple-soft);">
-          Ingresa el PIN de administradora
-        </p>
-        <div class="admin-pin-form">
-          <input type="password" id="admin-pin" maxlength="20" placeholder="••••••">
-          <button class="btn-magic" style="width:100%; margin-top:0;" id="admin-login-btn">
-            Entrar
-          </button>
-        </div>
-      </div>
-
-      <div id="admin-content" style="display:none;">
-        <div class="admin-stats">
-          <div class="stat-box">
-            <div class="stat-number" id="stat-confirmados">0</div>
-            <div class="stat-label">Confirmados</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-number" id="stat-personas">0</div>
-            <div class="stat-label">Total personas</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-number" id="stat-declinados">0</div>
-            <div class="stat-label">No asisten</div>
-          </div>
-        </div>
-
-        <div class="admin-table-wrap">
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Asistencia</th>
-                <th>Acomp.</th>
-                <th>Mensaje</th>
-                <th>Fecha</th>
-              </tr>
-            </thead>
-            <tbody id="admin-table-body"></tbody>
-          </table>
-        </div>
-
-        <div class="admin-actions">
-          <button class="btn-admin" id="admin-refresh">🔄 Actualizar</button>
-          <button class="btn-admin" id="admin-export">📥 Exportar CSV</button>
-        </div>
-
-        <p class="admin-hint" id="admin-hint"></p>
-      </div>
-    </div>
-  </div>
-
   <script>
     // ══════════════════════════════════════════════
     //  CONFIGURACIÓN — Personaliza aquí
     // ══════════════════════════════════════════════
     const CONFIG = {
-      // URL de Google Apps Script (ver google-apps-script.gs)
-      googleScriptUrl: '',
+      // API de confirmaciones (Neon + Netlify Functions)
+      apiUrl: '/.netlify/functions/rsvp',
 
-      // URL CSV publicada de Google Sheets (para ver confirmaciones)
-      sheetCsvUrl: '',
-
-      // PIN para abrir el panel de administración
-      adminPin: 'xv2025',
-
-      // Clave única del evento (no cambiar si ya hay confirmaciones)
+      // Clave local para recordar si ya confirmó en este navegador
       storageKey: 'xv-miley-naela-2026',
 
       // Música local (coloca el MP3 en la carpeta audio/)
@@ -1542,175 +1232,32 @@
       saveLocalConfirmation(entry);
       localStorage.setItem(CONFIG.storageKey + '-user', entry.nombre);
 
-      if (CONFIG.googleScriptUrl) {
+      if (CONFIG.apiUrl) {
         try {
-          await fetch(CONFIG.googleScriptUrl, {
+          const res = await fetch(CONFIG.apiUrl, {
             method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'text/plain' },
-            body: JSON.stringify(entry)
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              nombre: entry.nombre,
+              asistencia: entry.asistencia,
+              acompanantes: entry.acompanantes,
+              mensaje: entry.mensaje
+            })
           });
+          const json = await res.json();
+          if (!res.ok) throw new Error(json.error || 'Error al guardar');
+          if (json.data?.fecha) entry.fecha = json.data.fecha;
         } catch (err) {
-          rsvpMessage.textContent = 'Guardado localmente. No se pudo conectar con el servidor.';
+          rsvpMessage.textContent = err.message || 'No se pudo guardar la confirmación. Intenta de nuevo.';
           rsvpMessage.className = 'rsvp-message error';
+          rsvpMessage.style.display = 'block';
+          btnRsvp.disabled = false;
+          btnRsvp.textContent = 'Enviar confirmación ✨';
+          return;
         }
       }
 
       setTimeout(() => showAlreadyConfirmed(entry), 600);
-    });
-
-    // ══════════════════════════════════════════════
-    //  ADMIN — Panel de confirmaciones
-    // ══════════════════════════════════════════════
-    const adminOverlay = document.getElementById('admin-overlay');
-    const adminLogin = document.getElementById('admin-login');
-    const adminContent = document.getElementById('admin-content');
-    let allConfirmations = [];
-
-    let adminTapCount = 0;
-    document.getElementById('admin-trigger').addEventListener('click', () => {
-      adminTapCount++;
-      if (adminTapCount >= 5) {
-        adminOverlay.classList.add('open');
-        adminTapCount = 0;
-      }
-      setTimeout(() => { adminTapCount = 0; }, 2000);
-    });
-
-    if (location.hash === '#admin') {
-      adminOverlay.classList.add('open');
-    }
-
-    document.getElementById('admin-close').addEventListener('click', () => {
-      adminOverlay.classList.remove('open');
-      history.replaceState(null, '', location.pathname);
-    });
-
-    document.getElementById('admin-login-btn').addEventListener('click', tryAdminLogin);
-    document.getElementById('admin-pin').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') tryAdminLogin();
-    });
-
-    function tryAdminLogin() {
-      const pin = document.getElementById('admin-pin').value;
-      if (pin === CONFIG.adminPin) {
-        adminLogin.style.display = 'none';
-        adminContent.style.display = 'block';
-        loadConfirmations();
-      } else {
-        document.getElementById('admin-pin').value = '';
-        document.getElementById('admin-pin').placeholder = 'PIN incorrecto';
-      }
-    }
-
-    async function loadConfirmations() {
-      allConfirmations = getLocalConfirmations();
-
-      if (CONFIG.sheetCsvUrl) {
-        try {
-          const res = await fetch(CONFIG.sheetCsvUrl);
-          const text = await res.text();
-          const sheetData = parseCSV(text);
-          if (sheetData.length > 0) {
-            allConfirmations = sheetData.map(row => ({
-              fecha: row['Fecha'] || row.fecha || '',
-              nombre: row['Nombre'] || row.nombre || '',
-              asistencia: row['Asistencia'] || row.asistencia || '',
-              acompanantes: parseInt(row['Acompañantes'] || row.acompanantes || 0, 10),
-              mensaje: row['Mensaje'] || row.mensaje || ''
-            }));
-          }
-        } catch (err) {
-          document.getElementById('admin-hint').textContent =
-            'No se pudo cargar Google Sheets. Mostrando datos locales del navegador.';
-        }
-      } else {
-        document.getElementById('admin-hint').textContent =
-          'Modo local: solo se ven confirmaciones de este navegador. Configura Google Sheets en CONFIG para ver todas las confirmaciones de tus invitados.';
-      }
-
-      renderAdminTable();
-    }
-
-    function parseCSV(text) {
-      const lines = text.trim().split('\n');
-      if (lines.length < 2) return [];
-      const headers = parseCSVLine(lines[0]);
-      return lines.slice(1).map(line => {
-        const values = parseCSVLine(line);
-        const obj = {};
-        headers.forEach((h, i) => { obj[h.trim()] = (values[i] || '').trim(); });
-        return obj;
-      });
-    }
-
-    function parseCSVLine(line) {
-      const result = [];
-      let current = '';
-      let inQuotes = false;
-      for (let i = 0; i < line.length; i++) {
-        const ch = line[i];
-        if (ch === '"') {
-          inQuotes = !inQuotes;
-        } else if (ch === ',' && !inQuotes) {
-          result.push(current);
-          current = '';
-        } else {
-          current += ch;
-        }
-      }
-      result.push(current);
-      return result;
-    }
-
-    function renderAdminTable() {
-      const tbody = document.getElementById('admin-table-body');
-      const confirmados = allConfirmations.filter(c => c.asistencia === 'Sí');
-      const declinados = allConfirmations.filter(c => c.asistencia === 'No');
-      const totalPersonas = confirmados.reduce((sum, c) => sum + 1 + (c.acompanantes || 0), 0);
-
-      document.getElementById('stat-confirmados').textContent = confirmados.length;
-      document.getElementById('stat-personas').textContent = totalPersonas;
-      document.getElementById('stat-declinados').textContent = declinados.length;
-
-      if (allConfirmations.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="admin-empty">Aún no hay confirmaciones</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = allConfirmations.map(c => `
-        <tr>
-          <td>${escapeHtml(c.nombre)}</td>
-          <td><span class="badge ${c.asistencia === 'Sí' ? 'badge-yes' : 'badge-no'}">${escapeHtml(c.asistencia)}</span></td>
-          <td>${c.asistencia === 'Sí' ? (c.acompanantes || 0) : '—'}</td>
-          <td>${escapeHtml(c.mensaje || '—')}</td>
-          <td style="font-size:0.8rem; white-space:nowrap;">${escapeHtml(c.fecha || '')}</td>
-        </tr>
-      `).join('');
-    }
-
-    function escapeHtml(str) {
-      const div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
-    }
-
-    document.getElementById('admin-refresh').addEventListener('click', loadConfirmations);
-
-    document.getElementById('admin-export').addEventListener('click', () => {
-      if (allConfirmations.length === 0) return;
-      const headers = ['Fecha', 'Nombre', 'Asistencia', 'Acompañantes', 'Mensaje'];
-      const rows = allConfirmations.map(c =>
-        [c.fecha, c.nombre, c.asistencia, c.acompanantes, c.mensaje]
-          .map(v => `"${String(v || '').replace(/"/g, '""')}"`)
-          .join(',')
-      );
-      const csv = [headers.join(','), ...rows].join('\n');
-      const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'confirmaciones-xv-miley-naela.csv';
-      link.click();
     });
 
     // ══════════════════════════════════════════════

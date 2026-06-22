@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmaciones · XV Años · Miley Naela</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #f4c542;
+      --purple-deep: #2d1b4e;
+      --purple-soft: #9b7bb8;
+      --lavender: #e8d5f2;
+      --sky: #1a0f2e;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      background: radial-gradient(ellipse at 50% 0%, #3d2060 0%, var(--sky) 50%, #0d0618 100%);
+      color: var(--lavender);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .panel {
+      background: linear-gradient(145deg, #2a1845, #1a0f2e);
+      border: 1px solid rgba(244, 197, 66, 0.3);
+      border-radius: 20px;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-family: 'Cinzel Decorative', serif;
+      color: var(--gold);
+      font-size: clamp(1.4rem, 5vw, 1.8rem);
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: var(--purple-soft);
+      margin-bottom: 1.5rem;
+    }
+
+    .pin-form input {
+      width: 100%;
+      padding: 0.85rem;
+      background: rgba(26, 15, 46, 0.7);
+      border: 1px solid rgba(155, 123, 184, 0.4);
+      border-radius: 10px;
+      color: var(--lavender);
+      font-size: 1.1rem;
+      text-align: center;
+      letter-spacing: 0.3em;
+      margin-bottom: 1rem;
+    }
+
+    .btn-magic {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, var(--gold), #e6a817);
+      color: var(--purple-deep);
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(244, 197, 66, 0.4);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-box {
+      background: rgba(92, 61, 122, 0.3);
+      border: 1px solid rgba(244, 197, 66, 0.2);
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.8rem;
+      color: var(--gold);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--purple-soft);
+      margin-top: 0.25rem;
+    }
+
+    .table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    th {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      padding: 0.75rem 0.5rem;
+      border-bottom: 1px solid rgba(244, 197, 66, 0.3);
+      text-align: left;
+    }
+
+    td {
+      padding: 0.65rem 0.5rem;
+      border-bottom: 1px solid rgba(155, 123, 184, 0.15);
+    }
+
+    tr:hover td { background: rgba(244, 197, 66, 0.05); }
+
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+    }
+
+    .badge-yes { background: rgba(76, 175, 80, 0.2); color: #a5d6a7; }
+    .badge-no { background: rgba(244, 67, 54, 0.2); color: #ef9a9a; }
+
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-admin {
+      padding: 0.65rem 1.25rem;
+      background: rgba(92, 61, 122, 0.5);
+      border: 1px solid rgba(244, 197, 66, 0.3);
+      border-radius: 8px;
+      color: var(--lavender);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .btn-admin:hover { border-color: var(--gold); color: var(--gold); }
+
+    .hint, .error {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--purple-soft);
+    }
+
+    .error { color: #ef9a9a; }
+
+    .empty { text-align: center; padding: 2rem; color: var(--purple-soft); }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 1.5rem;
+      color: var(--purple-soft);
+      text-decoration: none;
+    }
+
+    .back-link:hover { color: var(--gold); }
+
+    @media (max-width: 480px) {
+      .stats { grid-template-columns: 1fr; }
+      .panel { padding: 1.5rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel">
+      <h1>🏰 Confirmaciones</h1>
+      <p class="subtitle">Panel de administración · XV Años Miley Naela</p>
+
+      <div id="login-view">
+        <p style="text-align:center; margin-bottom:1rem; color:var(--purple-soft);">
+          Ingresa el PIN de administradora
+        </p>
+        <div class="pin-form">
+          <input type="password" id="admin-pin" maxlength="20" placeholder="••••••">
+          <button type="button" class="btn-magic" id="login-btn">Entrar</button>
+        </div>
+        <p class="error" id="login-error" style="display:none;"></p>
+      </div>
+
+      <div id="admin-view" style="display:none;">
+        <div class="stats">
+          <div class="stat-box">
+            <div class="stat-number" id="stat-confirmados">0</div>
+            <div class="stat-label">Confirmados</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number" id="stat-personas">0</div>
+            <div class="stat-label">Total personas</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number" id="stat-declinados">0</div>
+            <div class="stat-label">No asisten</div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Asistencia</th>
+                <th>Acomp.</th>
+                <th>Mensaje</th>
+                <th>Fecha</th>
+              </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="btn-admin" id="btn-refresh">🔄 Actualizar</button>
+          <button type="button" class="btn-admin" id="btn-export">📥 Exportar CSV</button>
+          <button type="button" class="btn-admin" id="btn-logout">Salir</button>
+        </div>
+
+        <p class="hint" id="admin-hint"></p>
+      </div>
+    </div>
+
+    <a class="back-link" href="index.html">← Volver a la invitación</a>
+  </div>
+
+  <script>
+    const CONFIG = {
+      // API de confirmaciones (Neon + Netlify Functions)
+      apiUrl: '/.netlify/functions/rsvp'
+    };
+
+    const SESSION_KEY = 'xv-admin-pin';
+    let allConfirmations = [];
+    let adminPin = sessionStorage.getItem(SESSION_KEY) || '';
+
+    const loginView = document.getElementById('login-view');
+    const adminView = document.getElementById('admin-view');
+    const loginError = document.getElementById('login-error');
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function showAdmin() {
+      loginView.style.display = 'none';
+      adminView.style.display = 'block';
+      loginError.style.display = 'none';
+    }
+
+    function showLogin(message) {
+      loginView.style.display = 'block';
+      adminView.style.display = 'none';
+      if (message) {
+        loginError.textContent = message;
+        loginError.style.display = 'block';
+      }
+    }
+
+    async function loadConfirmations() {
+      document.getElementById('admin-hint').textContent = 'Cargando...';
+
+      try {
+        const res = await fetch(CONFIG.apiUrl, {
+          headers: { 'X-Admin-Pin': adminPin }
+        });
+        const json = await res.json();
+
+        if (res.status === 401) {
+          sessionStorage.removeItem(SESSION_KEY);
+          adminPin = '';
+          showLogin('PIN incorrecto o sesión expirada');
+          return;
+        }
+
+        if (!res.ok) throw new Error(json.error || 'Error al cargar');
+
+        allConfirmations = json.data || [];
+        document.getElementById('admin-hint').textContent =
+          `${allConfirmations.length} confirmación(es) en la base de datos Neon.`;
+        renderTable();
+      } catch (err) {
+        document.getElementById('admin-hint').textContent = '';
+        loginError.textContent = err.message || 'No se pudo conectar con la API';
+        loginError.style.display = 'block';
+      }
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('table-body');
+      const confirmados = allConfirmations.filter(c => c.asistencia === 'Sí');
+      const declinados = allConfirmations.filter(c => c.asistencia === 'No');
+      const totalPersonas = confirmados.reduce((sum, c) => sum + 1 + (c.acompanantes || 0), 0);
+
+      document.getElementById('stat-confirmados').textContent = confirmados.length;
+      document.getElementById('stat-personas').textContent = totalPersonas;
+      document.getElementById('stat-declinados').textContent = declinados.length;
+
+      if (allConfirmations.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty">Aún no hay confirmaciones</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = allConfirmations.map(c => `
+        <tr>
+          <td>${escapeHtml(c.nombre)}</td>
+          <td><span class="badge ${c.asistencia === 'Sí' ? 'badge-yes' : 'badge-no'}">${escapeHtml(c.asistencia)}</span></td>
+          <td>${c.asistencia === 'Sí' ? (c.acompanantes || 0) : '—'}</td>
+          <td>${escapeHtml(c.mensaje || '—')}</td>
+          <td style="font-size:0.8rem; white-space:nowrap;">${escapeHtml(c.fecha || '')}</td>
+        </tr>
+      `).join('');
+    }
+
+    async function tryLogin() {
+      adminPin = document.getElementById('admin-pin').value.trim();
+      if (!adminPin) return;
+
+      sessionStorage.setItem(SESSION_KEY, adminPin);
+      showAdmin();
+      await loadConfirmations();
+    }
+
+    document.getElementById('login-btn').addEventListener('click', tryLogin);
+    document.getElementById('admin-pin').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') tryLogin();
+    });
+
+    document.getElementById('btn-refresh').addEventListener('click', loadConfirmations);
+
+    document.getElementById('btn-export').addEventListener('click', () => {
+      if (allConfirmations.length === 0) return;
+      const headers = ['Fecha', 'Nombre', 'Asistencia', 'Acompañantes', 'Mensaje'];
+      const rows = allConfirmations.map(c =>
+        [c.fecha, c.nombre, c.asistencia, c.acompanantes, c.mensaje]
+          .map(v => `"${String(v || '').replace(/"/g, '""')}"`)
+          .join(',')
+      );
+      const csv = [headers.join(','), ...rows].join('\n');
+      const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'confirmaciones-xv-miley-naela.csv';
+      link.click();
+    });
+
+    document.getElementById('btn-logout').addEventListener('click', () => {
+      sessionStorage.removeItem(SESSION_KEY);
+      adminPin = '';
+      document.getElementById('admin-pin').value = '';
+      showLogin();
+    });
+
+    if (adminPin) {
+      showAdmin();
+      loadConfirmations();
+    }
+  </script>
+</body>
+</html>
