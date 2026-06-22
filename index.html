@@ -497,6 +497,46 @@
       margin-top: 1.5rem;
     }
 
+    /* ── Lluvia de sobres ── */
+    .sobres-box {
+      max-width: 520px;
+      margin: 0 auto;
+      background: linear-gradient(145deg, rgba(244, 197, 66, 0.1), rgba(45, 27, 78, 0.55));
+      border: 1px solid rgba(244, 197, 66, 0.35);
+      border-radius: 20px;
+      padding: 2rem 1.75rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .sobres-box .sobres-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+      display: block;
+      animation: bounce 2.5s ease-in-out infinite;
+    }
+
+    .sobres-box h3 {
+      font-family: 'Cinzel Decorative', serif;
+      color: var(--gold);
+      font-size: clamp(1.1rem, 3.5vw, 1.35rem);
+      letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+    }
+
+    .sobres-box p {
+      font-size: clamp(1.05rem, 2.8vw, 1.2rem);
+      line-height: 1.75;
+      color: var(--lavender);
+    }
+
+    .sobres-box .sobres-note {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      color: var(--purple-soft);
+      font-style: italic;
+    }
+
     /* ── Mapa / botón ── */
     .map-section {
       text-align: center;
@@ -969,6 +1009,25 @@
         </p>
         <p class="quote">
           "Veo en ti la luz brillar, y te invito a ser parte de mi cuento de hadas."
+        </p>
+      </div>
+    </section>
+
+    <!-- LLUVIA DE SOBRES -->
+    <section id="sobres">
+      <h2 class="section-title reveal">Lluvia de Sobres</h2>
+      <div class="section-divider reveal"><span>💌</span></div>
+
+      <div class="sobres-box reveal">
+        <span class="sobres-icon">✉️</span>
+        <h3>Tu presencia es mi mejor regalo</h3>
+        <p>
+          Si deseas obsequiarme algo en este día tan especial,
+          con mucho cariño te invito a ser parte de mi
+          <strong style="color:var(--gold); font-family:'Cinzel Decorative',serif;">lluvia de sobres</strong>.
+        </p>
+        <p class="sobres-note">
+          ¡Gracias por acompañarme y hacer de mis XV un cuento de hadas!
         </p>
       </div>
     </section>
