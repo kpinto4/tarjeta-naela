@@ -497,44 +497,35 @@
       margin-top: 1.5rem;
     }
 
-    /* ── Lluvia de sobres ── */
-    .sobres-box {
-      max-width: 520px;
-      margin: 0 auto;
-      background: linear-gradient(145deg, rgba(244, 197, 66, 0.1), rgba(45, 27, 78, 0.55));
+    /* ── Lluvia de sobres (dentro del RSVP) ── */
+    .sobres-nota {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      padding: 1rem 1.15rem;
+      margin-bottom: 1.25rem;
+      background: rgba(244, 197, 66, 0.08);
       border: 1px solid rgba(244, 197, 66, 0.35);
-      border-radius: 20px;
-      padding: 2rem 1.75rem;
-      text-align: center;
-      position: relative;
+      border-radius: 12px;
+      text-align: left;
     }
 
-    .sobres-box .sobres-icon {
-      font-size: 2.5rem;
-      margin-bottom: 0.75rem;
-      display: block;
-      animation: bounce 2.5s ease-in-out infinite;
+    .sobres-nota .sobres-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      line-height: 1.2;
     }
 
-    .sobres-box h3 {
-      font-family: 'Cinzel Decorative', serif;
-      color: var(--gold);
-      font-size: clamp(1.1rem, 3.5vw, 1.35rem);
-      letter-spacing: 0.08em;
-      margin-bottom: 1rem;
-    }
-
-    .sobres-box p {
-      font-size: clamp(1.05rem, 2.8vw, 1.2rem);
-      line-height: 1.75;
+    .sobres-nota p {
       color: var(--lavender);
+      line-height: 1.55;
+      font-size: 1.02rem;
+      margin: 0;
     }
 
-    .sobres-box .sobres-note {
-      margin-top: 1rem;
-      font-size: 0.95rem;
-      color: var(--purple-soft);
-      font-style: italic;
+    .sobres-nota strong {
+      color: var(--gold);
+      font-family: 'Cinzel Decorative', serif;
     }
 
     /* ── Mapa / botón ── */
@@ -1013,25 +1004,6 @@
       </div>
     </section>
 
-    <!-- LLUVIA DE SOBRES -->
-    <section id="sobres">
-      <h2 class="section-title reveal">Lluvia de Sobres</h2>
-      <div class="section-divider reveal"><span>💌</span></div>
-
-      <div class="sobres-box reveal">
-        <span class="sobres-icon">✉️</span>
-        <h3>Tu presencia es mi mejor regalo</h3>
-        <p>
-          Si deseas obsequiarme algo en este día tan especial,
-          con mucho cariño te invito a ser parte de mi
-          <strong style="color:var(--gold); font-family:'Cinzel Decorative',serif;">lluvia de sobres</strong>.
-        </p>
-        <p class="sobres-note">
-          ¡Gracias por acompañarme y hacer de mis XV un cuento de hadas!
-        </p>
-      </div>
-    </section>
-
     <!-- CONFIRMAR ASISTENCIA -->
     <section id="rsvp">
       <h2 class="section-title reveal">Confirma tu Asistencia</h2>
@@ -1075,6 +1047,14 @@
             <label for="mensaje-rsvp">Mensaje para Miley Naela (opcional)</label>
             <textarea id="mensaje-rsvp" name="mensaje"
                       placeholder="Escríbele un mensajito especial..."></textarea>
+          </div>
+
+          <div class="sobres-nota">
+            <span class="sobres-icon">✉️</span>
+            <p>
+              Tu presencia es mi mejor regalo. Si deseas obsequiarme algo,
+              con cariño te invito a ser parte de mi <strong>lluvia de sobres</strong>.
+            </p>
           </div>
 
           <button type="submit" class="btn-submit" id="btn-rsvp" disabled>
