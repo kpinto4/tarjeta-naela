@@ -1013,8 +1013,8 @@
           </div>
 
           <div class="form-group">
-            <label for="mensaje">Mensaje para Miley Naela (opcional)</label>
-            <textarea id="mensaje" name="mensaje"
+            <label for="mensaje-rsvp">Mensaje para Miley Naela (opcional)</label>
+            <textarea id="mensaje-rsvp" name="mensaje"
                       placeholder="Escríbele un mensajito especial..."></textarea>
           </div>
 
@@ -1412,7 +1412,7 @@
         familia: familiaId,
         asistencia: asistenciaEl.value,
         personas: getPersonasConfirmadas(asistenciaSi),
-        mensaje: document.getElementById('mensaje').value.trim()
+        mensaje: (document.getElementById('mensaje-rsvp')?.value || '').trim()
       };
 
       if (!entry.nombre || !entry.familia) {
