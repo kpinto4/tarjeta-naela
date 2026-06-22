@@ -176,16 +176,12 @@
             <input type="text" id="f-nombre" required placeholder="Familia García">
           </div>
           <div class="form-group">
-            <label for="f-saludo">Saludo en la invitación</label>
-            <input type="text" id="f-saludo" placeholder="Querida Familia García">
-          </div>
-          <div class="form-group">
             <label for="f-personas">Personas permitidas</label>
             <input type="number" id="f-personas" min="1" max="20" value="4" required>
           </div>
           <div class="form-group">
-            <label for="f-whatsapp">WhatsApp (ej. 3001234567)</label>
-            <input type="tel" id="f-whatsapp" placeholder="3001234567">
+            <label for="f-whatsapp">WhatsApp *</label>
+            <input type="tel" id="f-whatsapp" required placeholder="3001234567">
           </div>
         </div>
         <div class="actions">
@@ -300,7 +296,6 @@
     function resetFamiliaForm() {
       document.getElementById('f-id').value = '';
       document.getElementById('f-nombre').value = '';
-      document.getElementById('f-saludo').value = '';
       document.getElementById('f-personas').value = '4';
       document.getElementById('f-whatsapp').value = '';
       document.getElementById('f-submit-btn').textContent = '+ Agregar familia';
@@ -310,7 +305,6 @@
     function editFamilia(f) {
       document.getElementById('f-id').value = f.id;
       document.getElementById('f-nombre').value = f.nombre;
-      document.getElementById('f-saludo').value = f.saludo;
       document.getElementById('f-personas').value = f.maxPersonas;
       document.getElementById('f-whatsapp').value = f.whatsapp || '';
       document.getElementById('f-submit-btn').textContent = '💾 Guardar cambios';
@@ -344,7 +338,6 @@
       tbody.innerHTML = allFamilias.map(f => {
         const link = buildInviteLink(f.id);
         const waUrl = whatsappInviteUrl(link, f.saludo, f.whatsapp);
-        const waDisplay = f.whatsapp ? escapeHtml(f.whatsapp) : '<span style="color:#ef9a9a">Sin número</span>';
         return `
           <tr>
             <td>
@@ -352,12 +345,10 @@
               <span style="font-size:0.85rem;color:var(--purple-soft);">${escapeHtml(f.nombre)}</span>
             </td>
             <td>${f.maxPersonas}</td>
-            <td>${waDisplay}</td>
+            <td>${escapeHtml(f.whatsapp)}</td>
             <td class="link-cell">${escapeHtml(link)}</td>
             <td>
-              ${waUrl
-                ? `<a class="btn-sm btn-sm-wa" href="${waUrl}" target="_blank" rel="noopener">📲 Enviar</a>`
-                : `<span class="btn-sm" style="opacity:0.4;cursor:not-allowed;" title="Agrega WhatsApp">📲 Enviar</span>`}
+              <a class="btn-sm btn-sm-wa" href="${waUrl}" target="_blank" rel="noopener">📲 Enviar</a>
               <button type="button" class="btn-sm" data-copy="${escapeHtml(link)}">📋</button>
               <button type="button" class="btn-sm" data-edit="${escapeHtml(f.id)}">✏️</button>
               <button type="button" class="btn-sm btn-sm-danger" data-delete="${escapeHtml(f.id)}">✕</button>
@@ -391,16 +382,6 @@
       });
     }
 
-    document.getElementById('f-nombre').addEventListener('blur', () => {
-      const saludo = document.getElementById('f-saludo');
-      const nombre = document.getElementById('f-nombre').value.trim();
-      if (nombre && !saludo.value.trim()) {
-        saludo.value = nombre.toLowerCase().startsWith('familia') || nombre.toLowerCase().startsWith('los')
-          ? `Querida ${nombre}`
-          : `Querida Familia ${nombre}`;
-      }
-    });
-
     document.getElementById('familia-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const errEl = document.getElementById('familia-error');
@@ -409,10 +390,15 @@
       const payload = {
         id: document.getElementById('f-id').value.trim() || undefined,
         nombre: document.getElementById('f-nombre').value.trim(),
-        saludo: document.getElementById('f-saludo').value.trim(),
         maxPersonas: parseInt(document.getElementById('f-personas').value, 10),
         whatsapp: document.getElementById('f-whatsapp').value.trim()
       };
+
+      if (!payload.whatsapp) {
+        errEl.textContent = 'WhatsApp es obligatorio';
+        errEl.style.display = 'block';
+        return;
+      }
 
       try {
         const res = await fetch(CONFIG.familiasUrl, {

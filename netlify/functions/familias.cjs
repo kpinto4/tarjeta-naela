@@ -61,6 +61,15 @@ function parseBody(body) {
   return body;
 }
 
+function buildSaludo(nombre) {
+  const n = String(nombre || '').trim();
+  const lower = n.toLowerCase();
+  if (lower.startsWith('familia ') || lower.startsWith('los ') || lower.startsWith('las ')) {
+    return `Querida ${n}`;
+  }
+  return `Querida Familia ${n}`;
+}
+
 function slugify(text) {
   return String(text || '')
     .toLowerCase()
@@ -83,19 +92,18 @@ function formatFamilia(row) {
 
 function validateFamilia(data) {
   const nombre = String(data.nombre || '').trim();
-  let saludo = String(data.saludo || '').trim();
   let id = String(data.id || '').trim();
   let maxPersonas = Number.parseInt(data.maxPersonas, 10);
   const whatsapp = normalizeWhatsApp(data.whatsapp);
 
   if (!nombre || nombre.length > 255) return { error: 'Nombre de familia inválido' };
-  if (!saludo) saludo = `Querida ${nombre}`;
-  if (saludo.length > 255) return { error: 'Saludo demasiado largo' };
+  if (!whatsapp) return { error: 'WhatsApp es obligatorio' };
+  if (whatsapp.length < 10) return { error: 'WhatsApp inválido (ej. 3001234567)' };
+  const saludo = buildSaludo(nombre);
   if (!id) id = slugify(nombre);
   if (!id) return { error: 'No se pudo generar el ID del enlace' };
   if (Number.isNaN(maxPersonas)) maxPersonas = 4;
   if (maxPersonas < 1 || maxPersonas > 20) return { error: 'Personas debe ser entre 1 y 20' };
-  if (whatsapp && whatsapp.length < 10) return { error: 'WhatsApp inválido (ej. 3001234567)' };
 
   return { familia: { id, nombre, saludo, maxPersonas, whatsapp } };
 }
