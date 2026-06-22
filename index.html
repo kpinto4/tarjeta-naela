@@ -983,7 +983,7 @@
           <p>💌 Para confirmar tu asistencia, usa el <strong style="color:var(--gold);">enlace personalizado</strong> que te enviamos por WhatsApp.</p>
         </div>
 
-        <form class="rsvp-form" id="rsvp-form">
+        <form class="rsvp-form" id="rsvp-form" novalidate>
           <input type="hidden" id="familia-id" name="familia" value="">
           <input type="hidden" id="personas" value="1">
 
@@ -1018,8 +1018,8 @@
                       placeholder="Escríbele un mensajito especial..."></textarea>
           </div>
 
-          <button type="submit" class="btn-submit" id="btn-rsvp">
-            Enviar confirmación ✨
+          <button type="submit" class="btn-submit" id="btn-rsvp" disabled>
+            Cargando invitación...
           </button>
 
           <div class="rsvp-message" id="rsvp-message"></div>
@@ -1162,6 +1162,12 @@
         document.getElementById('nombre').value = familia.nombre;
         document.getElementById('familia-id').value = familia.id;
         setupInvitacionCupo(familia.maxPersonas);
+
+        const btn = document.getElementById('btn-rsvp');
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = 'Enviar confirmación ✨';
+        }
       } catch {
         mostrarSinEnlace();
       }
@@ -1279,17 +1285,37 @@
       return cupo || 1;
     }
 
+    function resetBtnRsvp() {
+      if (!invitadoActual) return;
+      btnRsvp.disabled = false;
+      btnRsvp.textContent = 'Enviar confirmación ✨';
+    }
+
     async function initRsvp() {
       await initInvitacionPersonalizada();
 
       const familiaParam = getFamiliaParam();
-      const savedName = localStorage.getItem(CONFIG.storageKey + '-user' + (familiaParam ? '-' + familiaParam : ''));
-      if ((savedName || familiaParam) && invitadoActual) {
-        const saved = getLocalConfirmations().find(c =>
-          familiaParam ? c.familia === familiaParam : c.nombre.toLowerCase() === savedName.toLowerCase()
-        );
-        if (saved) showAlreadyConfirmed(saved);
-      }
+      if (!invitadoActual || !familiaParam) return;
+
+      try {
+        const res = await fetch(CONFIG.apiUrl);
+        if (res.ok) {
+          const data = await res.json();
+          const serverEntry = (data.data || []).find(c => c.familia === familiaParam);
+          if (serverEntry) {
+            saveLocalConfirmation({
+              fecha: serverEntry.fecha,
+              nombre: serverEntry.nombre,
+              familia: serverEntry.familia,
+              asistencia: serverEntry.asistencia,
+              personas: serverEntry.personas,
+              mensaje: serverEntry.mensaje || ''
+            });
+            localStorage.setItem(CONFIG.storageKey + '-user-' + familiaParam, serverEntry.nombre);
+            showAlreadyConfirmed(serverEntry);
+          }
+        }
+      } catch { /* formulario listo para enviar */ }
     }
 
     function getLocalConfirmations() {
@@ -1333,26 +1359,42 @@
         </div>`;
     }
 
-    function enviarAlServidor(entry) {
-      if (!CONFIG.apiUrl) return;
-      const payload = JSON.stringify({
-        nombre: entry.nombre,
-        familia: entry.familia,
-        asistencia: entry.asistencia,
-        personas: entry.personas,
-        mensaje: entry.mensaje
-      });
+    async function enviarAlServidor(entry) {
+      if (!CONFIG.apiUrl) return true;
 
-      fetch(CONFIG.apiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: payload,
-        keepalive: true
-      }).catch(() => {});
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+      try {
+        const res = await fetch(CONFIG.apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nombre: entry.nombre,
+            familia: entry.familia,
+            asistencia: entry.asistencia,
+            personas: entry.personas,
+            mensaje: entry.mensaje
+          }),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        return res.ok;
+      } catch {
+        clearTimeout(timeoutId);
+        return false;
+      }
     }
 
-    rsvpForm.addEventListener('submit', (e) => {
+    rsvpForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      if (!invitadoActual) {
+        rsvpMessage.textContent = 'Espera a que cargue tu invitación.';
+        rsvpMessage.className = 'rsvp-message error';
+        rsvpMessage.style.display = 'block';
+        return;
+      }
 
       const asistenciaEl = document.querySelector('input[name="asistencia"]:checked');
       if (!asistenciaEl) {
@@ -1373,19 +1415,29 @@
         mensaje: document.getElementById('mensaje').value.trim()
       };
 
-      if (!entry.nombre) {
-        rsvpMessage.textContent = 'Escribe tu nombre.';
+      if (!entry.nombre || !entry.familia) {
+        rsvpMessage.textContent = 'Tu invitación aún no cargó. Recarga la página.';
         rsvpMessage.className = 'rsvp-message error';
         rsvpMessage.style.display = 'block';
         return;
       }
 
+      btnRsvp.disabled = true;
+      btnRsvp.textContent = 'Enviando...';
+      rsvpMessage.style.display = 'none';
+
+      const ok = await enviarAlServidor(entry);
+
+      if (!ok) {
+        rsvpMessage.textContent = 'No se pudo enviar. Revisa tu internet e intenta otra vez.';
+        rsvpMessage.className = 'rsvp-message error';
+        rsvpMessage.style.display = 'block';
+        resetBtnRsvp();
+        return;
+      }
+
       saveLocalConfirmation(entry);
-      localStorage.setItem(
-        CONFIG.storageKey + '-user' + (familiaId ? '-' + familiaId : ''),
-        entry.nombre
-      );
-      enviarAlServidor(entry);
+      localStorage.setItem(CONFIG.storageKey + '-user-' + familiaId, entry.nombre);
       showAlreadyConfirmed(entry);
     });
 
