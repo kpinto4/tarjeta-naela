@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invitación · XV Años · Miley Naela</title>
+  <link rel="icon" href="images/julio.ico" type="image/x-icon">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -417,15 +418,16 @@
       display: inline-flex;
       justify-content: center;
       align-items: center;
-      width: 3.25rem;
-      height: 3.75rem;
+      width: 4.5rem;
+      height: 4.5rem;
       margin: 0 auto 1rem;
       animation: iconPulse 3s ease-in-out infinite;
     }
 
-    .calendar-icon svg {
+    .calendar-icon img {
       width: 100%;
       height: 100%;
+      object-fit: contain;
       filter: drop-shadow(0 2px 8px rgba(244, 197, 66, 0.25));
     }
 
@@ -954,14 +956,8 @@
 
       <div class="details-grid">
         <div class="detail-card reveal">
-          <span class="calendar-icon" aria-hidden="true">
-            <svg viewBox="0 0 64 72" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="18 de julio">
-              <rect x="4" y="14" width="56" height="54" rx="8" fill="#2a1845" stroke="#f4c542" stroke-width="2"/>
-              <rect x="4" y="14" width="56" height="20" rx="8" fill="#f4c542"/>
-              <rect x="4" y="26" width="56" height="8" fill="#f4c542"/>
-              <text x="32" y="28" text-anchor="middle" fill="#1a0f2e" font-size="11" font-weight="700" font-family="Georgia, serif">JUL</text>
-              <text x="32" y="58" text-anchor="middle" fill="#f4c542" font-size="26" font-weight="700" font-family="Georgia, serif">18</text>
-            </svg>
+          <span class="calendar-icon">
+            <img src="images/julio.ico" alt="18 de julio" width="72" height="72">
           </span>
           <p class="detail-label">Fecha</p>
           <div class="detail-value">
