@@ -6,11 +6,14 @@ const url =
 
 const sql = neon(url);
 
-const antes = await sql`SELECT COUNT(*)::int AS n FROM confirmaciones`;
-await sql`DELETE FROM confirmaciones`;
-const despues = await sql`SELECT COUNT(*)::int AS n FROM confirmaciones`;
-const familias = await sql`SELECT COUNT(*)::int AS n FROM familias`;
+const confAntes = await sql`SELECT COUNT(*)::int AS n FROM confirmaciones`;
+const famAntes = await sql`SELECT COUNT(*)::int AS n FROM familias`;
 
-console.log(`Confirmaciones borradas: ${antes[0].n}`);
-console.log(`Confirmaciones ahora: ${despues[0].n}`);
-console.log(`Familias conservadas: ${familias[0].n}`);
+await sql`DELETE FROM confirmaciones`;
+await sql`DELETE FROM familias`;
+
+const confDespues = await sql`SELECT COUNT(*)::int AS n FROM confirmaciones`;
+const famDespues = await sql`SELECT COUNT(*)::int AS n FROM familias`;
+
+console.log(`Confirmaciones borradas: ${confAntes[0].n} (ahora: ${confDespues[0].n})`);
+console.log(`Familias borradas: ${famAntes[0].n} (ahora: ${famDespues[0].n})`);
